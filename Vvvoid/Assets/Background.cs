@@ -17,7 +17,7 @@ public class Background : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        float newPosition = Mathf.Repeat(Time.time * statManger.GetSpeed(), background1.rect.width);
+        float newPosition = Mathf.Repeat(Time.time * statManger.GetScrollSpeed(), background1.rect.width);
         background1.transform.position = startPosition1 - new Vector3(1, 0, 0) * newPosition;
         background2.transform.position = startPosition2 - new Vector3(1, 0, 0) * newPosition;
     }
