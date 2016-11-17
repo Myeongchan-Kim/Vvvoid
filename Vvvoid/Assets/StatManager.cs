@@ -13,20 +13,23 @@ public class StatManager : MonoBehaviour {
     double _fuelAmout;
     double _maxFuelAmout;
     double _mass;
-    
-    public Text distanceText = null;
-    public Text velocityText = null;
+
+    Text distanceUI = null;
+    Text velocityUI = null;
 
     void Start () {
         _velocity = DEFALT_SPEED;
         _distance = 0.0;
-        
+
+        distanceUI = GameObject.Find("DistanceText").GetComponent<Text>();
+        velocityUI = GameObject.Find("VelocityText").GetComponent<Text>();    
 	}
 	
 	void Update () {
         _distance += (double)Time.deltaTime * _velocity;
-        distanceText.text = String.Format("Dist : {0:N3} m", _distance);
-        velocityText.text = String.Format("Speed : {0:N3} m/s", _velocity);
+        distanceUI.text = String.Format("Dist : {0:N3} m", _distance);
+        velocityUI.text = String.Format("Speed : {0:N3} m/s", _velocity);
+        
     }
 
     public float GetScrollSpeed() { return (float)(_velocity / Math.Pow(2.0, currentScale)); }
