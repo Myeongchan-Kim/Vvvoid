@@ -48,7 +48,7 @@ public class ObjectManager : MonoBehaviour {
 
         foreach (var meteor in meteors)
         {
-            meteor.transform.position += new Vector3(-0.1f, 0, 0);
+            meteor.transform.position -= new Vector3(0.1f, 0, 0);
         }
 	}
 }

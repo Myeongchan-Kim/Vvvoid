@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Resource : MonoBehaviour {
 
-    public int containingResource { get; set; }
+    public int containingResource;
 
 	// Use this for initialization
 	void Start () {
