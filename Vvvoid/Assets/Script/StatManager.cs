@@ -14,6 +14,7 @@ public class StatManager : MonoBehaviour {
     public double _maxFuelAmout;
     double _mass;
     double _fuelConsumtionForEachTouch = 1.0;
+    int resource;
 
     Text _distanceUI = null;
     Text _velocityUI = null;
@@ -90,6 +91,16 @@ public class StatManager : MonoBehaviour {
             _fuelAmout = _maxFuelAmout;
 
         return _fuelAmout;
+    }
+
+    public void AddResource(int resource)
+    {
+        this.resource += resource;
+    }
+
+    public int GetResource()
+    {
+        return resource;
     }
     
 }
