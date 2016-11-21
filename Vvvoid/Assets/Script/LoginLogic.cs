@@ -15,55 +15,42 @@
  */
 
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LoginLogic : MonoBehaviour
 {
+    public Button authButton;
+    public Text statusText;
+    public bool omitLogin;
     private const float FontSizeMult = 0.05f;
     private bool mWaitingForAuth = false;
-    private string mStatusText = "Ready.";
     private bool dumpedToken = false;
 
     void Start()
     {
+        if(omitLogin)
+        {
+            SceneManager.LoadScene("GameScene");
+        }
         // Select the Google Play Games platform as our social platform implementation
         GooglePlayGames.PlayGamesPlatform.Activate();
     }
 
-    void OnGUI()
+    public void OnButtonClick()
     {
-        GUI.skin.button.fontSize = (int)(FontSizeMult * Screen.height);
-        GUI.skin.label.fontSize = (int)(FontSizeMult * Screen.height);
-
-        GUI.Label(new Rect(20, 20, Screen.width, Screen.height * 0.25f),
-                  mStatusText);
-
-        Rect buttonRect = new Rect(0.25f * Screen.width, 0.10f * Screen.height,
-                          0.5f * Screen.width, 0.25f * Screen.height);
-        Rect imageRect = new Rect(buttonRect.x + buttonRect.width / 4f,
-                                  buttonRect.y + buttonRect.height * 1.1f,
-                                  buttonRect.width / 2f, buttonRect.width / 2f);
-
         if (mWaitingForAuth)
         {
             return;
         }
 
-        string buttonLabel;
-
-
+        var buttonText = authButton.GetComponentInChildren<Text>();
+        
         if (Social.localUser.authenticated)
         {
-            buttonLabel = "Sign Out";
-            if (Social.localUser.image != null)
-            {
-                GUI.DrawTexture(imageRect, Social.localUser.image,
-                                ScaleMode.ScaleToFit);
-            }
-            else {
-                GUI.Label(imageRect, "No image available");
-            }
+            buttonText.text = "Sign Out";
 
-            mStatusText = "Ready";
+            statusText.text = "Ready";
 
             if (!dumpedToken)
             {
@@ -73,34 +60,35 @@ public class LoginLogic : MonoBehaviour
                 dumpedToken = token != null && token.Length > 0;
             }
         }
-        else {
-            buttonLabel = "Authenticate";
+        else
+        {
+            buttonText.text = "Authenticate";
         }
 
-        if (GUI.Button(buttonRect, buttonLabel))
+        if (!Social.localUser.authenticated)
         {
-            if (!Social.localUser.authenticated)
+            // Authenticate
+            mWaitingForAuth = true;
+            statusText.text = "Authenticating...";
+            Social.localUser.Authenticate((bool success) =>
             {
-                // Authenticate
-                mWaitingForAuth = true;
-                mStatusText = "Authenticating...";
-                Social.localUser.Authenticate((bool success) =>
+                mWaitingForAuth = false;
+                if (success)
                 {
-                    mWaitingForAuth = false;
-                    if (success)
-                    {
-                        mStatusText = "Welcome " + Social.localUser.userName;
-                    }
-                    else {
-                        mStatusText = "Authentication failed.";
-                    }
-                });
-            }
-            else {
-                // Sign out!
-                mStatusText = "Signing out.";
-                ((GooglePlayGames.PlayGamesPlatform)Social.Active).SignOut();
-            }
+                    statusText.text = "Welcome " + Social.localUser.userName;
+                }
+                else
+                {
+                    statusText.text = "Authentication failed.";
+                }
+            });
+        }
+        else
+        {
+            // Sign out!
+            statusText.text = "Signing out.";
+            ((GooglePlayGames.PlayGamesPlatform)Social.Active).SignOut();
         }
     }
+    
 }
