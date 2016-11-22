@@ -35,35 +35,16 @@ public class LoginLogic : MonoBehaviour
         }
         // Select the Google Play Games platform as our social platform implementation
         GooglePlayGames.PlayGamesPlatform.Activate();
+
+
+
+        var buttonText = authButton.GetComponentInChildren<Text>();
+
+        buttonText.text = "Authenticate";
     }
 
     public void OnButtonClick()
     {
-        if (mWaitingForAuth)
-        {
-            return;
-        }
-
-        var buttonText = authButton.GetComponentInChildren<Text>();
-        
-        if (Social.localUser.authenticated)
-        {
-            buttonText.text = "Sign Out";
-
-            statusText.text = "Ready";
-
-            if (!dumpedToken)
-            {
-                string token = GooglePlayGames.PlayGamesPlatform.Instance.GetToken();
-
-                Debug.Log("AccessToken = " + token);
-                dumpedToken = token != null && token.Length > 0;
-            }
-        }
-        else
-        {
-            buttonText.text = "Authenticate";
-        }
 
         if (!Social.localUser.authenticated)
         {
@@ -76,18 +57,14 @@ public class LoginLogic : MonoBehaviour
                 if (success)
                 {
                     statusText.text = "Welcome " + Social.localUser.userName;
+
+                    SceneManager.LoadScene("GameScene");
                 }
                 else
                 {
                     statusText.text = "Authentication failed.";
                 }
             });
-        }
-        else
-        {
-            // Sign out!
-            statusText.text = "Signing out.";
-            ((GooglePlayGames.PlayGamesPlatform)Social.Active).SignOut();
         }
     }
     
