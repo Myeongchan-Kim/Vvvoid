@@ -32,7 +32,17 @@ public class StatManager : MonoBehaviour {
 	
 	void Update () {
         _distance += (double)Time.deltaTime * _velocity;
-        _distanceUI.text = String.Format("Dist : {0:N3} m", _distance);
+
+        // Use String.Builder!!!!!
+        // Like this.
+        // _distanceUI.text = String.Format("Dist : {0:N3} m", _distance);
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        sb.Length = 0;
+        sb.AppendFormat("Dist : {0:N3} m", _distance);
+        _distanceUI.text = sb.ToString();
+        sb.Length = 0;
+        // ...
+
         _velocityUI.text = String.Format("Speed : {0:N3} m/s", _velocity);
         _fuelUI.text = String.Format("Fuel : {0:N1} / {1:N1} ", _fuelAmout, _maxFuelAmout);
         
