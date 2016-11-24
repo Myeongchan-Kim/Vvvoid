@@ -16,28 +16,46 @@ public class StatManager : MonoBehaviour {
     double _fuelConsumtionForEachTouch = 10.0;
     int resource;
 
-    Text _distanceUI = null;
-    Text _velocityUI = null;
-    Text _fuelUI = null;
+    public Text _distanceUI = null;
+    public Text _velocityUI = null;
+    public Text _fuelUI = null;
 
     void Start () {
         _velocity = DEFALT_SPEED;
         distance = 0.0;
         _fuelAmout = _maxFuelAmout * 0.5;
         _mass = DEFALT_MASS;
-
-        _distanceUI = GameObject.Find("DistanceText").GetComponent<Text>();
-        _velocityUI = GameObject.Find("VelocityText").GetComponent<Text>();
-        _fuelUI = GameObject.Find("FuelText").GetComponent<Text>();
 	}
-	
-	void Update () {
+
+    string SetText(ref Text target, ref double targetValue, String formatStr)
+    {
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        sb.Length = 0;
+        sb.AppendFormat(formatStr, targetValue);
+        target.text = sb.ToString();
+        sb.Length = 0;
+        return sb.ToString();
+    }
+
+    void Update () {
         distance += (double)Time.deltaTime * _velocity;
-        _distanceUI.text = String.Format("Dist : {0:N3} m", distance);
-        _velocityUI.text = String.Format("Speed : {0:N3} m/s", _velocity);
-        _fuelUI.text = String.Format("Fuel : {0:N1} / {1:N1} ", _fuelAmout, _maxFuelAmout);
-        
-        if(Input.GetButtonDown("Fire1"))
+
+        System.Text.StringBuilder sb = new System.Text.StringBuilder();
+        sb.Length = 0;
+
+        sb.AppendFormat("Dist : {0:N3} m", distance);
+        _distanceUI.text = sb.ToString();
+        sb.Length = 0;
+
+        sb.AppendFormat("Speed : {0:N3} m/s", _velocity);
+        _velocityUI.text = sb.ToString();
+        sb.Length = 0;
+
+        sb.AppendFormat("Fuel : {0:N1} / {1:N1} ", _fuelAmout, _maxFuelAmout);
+        _fuelUI.text = sb.ToString();
+        sb.Length = 0;
+
+        if (Input.GetButtonDown("Fire1"))
         {
             double consumedEnergy = AccelCharacter(_fuelConsumtionForEachTouch);
             if (consumedEnergy > 0.0)
