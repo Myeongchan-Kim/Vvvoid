@@ -37,7 +37,6 @@ public class ObjectManager : MonoBehaviour {
             GameObject meteor = resourcePool[newObjectIndex];
             meteor.SetActive(true);
             meteor.transform.position = new Vector3(startXPosition, Random.Range(-yPositionMax, yPositionMax), 0);
-            resourcePool.Add(meteor);
         }
         
         if (Input.GetMouseButtonDown(0))
@@ -65,12 +64,13 @@ public class ObjectManager : MonoBehaviour {
 
         foreach (var meteor in resourcePool)
         {
-            if(!cullingBox.bounds.Contains(meteor.transform.position))
+            if(meteor.activeSelf && !cullingBox.bounds.Contains(meteor.transform.position))
             {
                 meteor.SetActive(false);
                 freeObjectIndex.Enqueue(resourcePool.IndexOf(meteor));
             }
-            meteor.transform.position -= new Vector3(0.1f, 0, 0);
+            float scrollSpeed = statManager.GetScrollSpeed();
+            meteor.transform.position -= new Vector3(scrollSpeed, 0, 0) * Time.deltaTime;
         }
 
     }
