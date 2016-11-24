@@ -9,11 +9,12 @@ public class StatManager : MonoBehaviour {
     public const double DEFALT_MASS = 10;
     public double currentScaleStep = 0.0;
     double _velocity;
-    double _distance;
+    public double distance { get; private set; }
     double _fuelAmout;
     public double _maxFuelAmout;
     double _mass;
-    double _fuelConsumtionForEachTouch = 1.0;
+    double _fuelConsumtionForEachTouch = 10.0;
+    int resource;
 
     Text _distanceUI = null;
     Text _velocityUI = null;
@@ -21,7 +22,7 @@ public class StatManager : MonoBehaviour {
 
     void Start () {
         _velocity = DEFALT_SPEED;
-        _distance = 0.0;
+        distance = 0.0;
         _fuelAmout = _maxFuelAmout * 0.5;
         _mass = DEFALT_MASS;
 
@@ -31,6 +32,7 @@ public class StatManager : MonoBehaviour {
 	}
 	
 	void Update () {
+<<<<<<< HEAD
         _distance += (double)Time.deltaTime * _velocity;
 
         // Use String.Builder!!!!!
@@ -43,6 +45,10 @@ public class StatManager : MonoBehaviour {
         sb.Length = 0;
         // ...
 
+=======
+        distance += (double)Time.deltaTime * _velocity;
+        _distanceUI.text = String.Format("Dist : {0:N3} m", distance);
+>>>>>>> refs/remotes/origin/master
         _velocityUI.text = String.Format("Speed : {0:N3} m/s", _velocity);
         _fuelUI.text = String.Format("Fuel : {0:N1} / {1:N1} ", _fuelAmout, _maxFuelAmout);
         
@@ -100,6 +106,16 @@ public class StatManager : MonoBehaviour {
             _fuelAmout = _maxFuelAmout;
 
         return _fuelAmout;
+    }
+
+    public void AddResource(int resource)
+    {
+        this.resource += resource;
+    }
+
+    public int GetResource()
+    {
+        return resource;
     }
     
 }
