@@ -66,6 +66,7 @@ public class ObjectManager : MonoBehaviour {
         {
             if(meteor.activeSelf && !cullingBox.bounds.Contains(meteor.transform.position))
             {
+                // Debug.Log("Metor OUT!");
                 meteor.SetActive(false);
                 freeObjectIndex.Enqueue(resourcePool.IndexOf(meteor));
             }
