@@ -7,7 +7,7 @@ public class StatManager : MonoBehaviour {
 
     public const double DEFALT_SPEED = 1.0;
     public const double DEFALT_MASS = 10;
-    public double currentScaleStep = 0.0;
+    double _currentScaleStep = 0.0;
     double _velocity;
     public double distance { get; private set; }
     double _fuelAmout;
@@ -70,10 +70,25 @@ public class StatManager : MonoBehaviour {
         yield return null;
     }
 
-    public float GetScrollSpeed() { return (float)(_velocity / Math.Pow(2.0, currentScaleStep)); }
+    public float GetScrollSpeed() { return (float)(_velocity / Math.Pow(2.0, _currentScaleStep)); }
 
     //clicker game has to have stat by double
     public double GetRealSpeed() { return _velocity; }
+    
+    public void SetScaleStep(int targetStep)
+    {
+        _currentScaleStep = targetStep;
+    }
+
+    public void ZoomInOutByStep(double step) //times == 10 means 10 times. times == 0.1 means 10% zoom out
+    {
+        _currentScaleStep += step;
+    }
+
+    public void ZoomInOutRealScale(double times)
+    {
+        _currentScaleStep += Math.Log(times, 2);
+    }
 
     public double AccelCharacter(double energy)
     {

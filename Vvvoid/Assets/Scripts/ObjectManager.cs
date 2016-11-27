@@ -81,7 +81,9 @@ public class ObjectManager : MonoBehaviour {
             foreach (var meteor in resourcePool)
             {
                 meteor.transform.localScale /= 2;
-                meteor.transform.position = (meteor.transform.position - player.transform.position) / 2;
+                float x = (meteor.transform.position.x - player.transform.position.x) / 2;
+                float y = (meteor.transform.position.y - player.transform.position.y) / 2;
+                meteor.transform.position = new Vector3(x, y, meteor.transform.position.z);
             }
 
             player.transform.localScale /= 2;
