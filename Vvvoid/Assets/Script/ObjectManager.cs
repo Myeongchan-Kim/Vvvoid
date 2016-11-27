@@ -7,7 +7,8 @@ public class ObjectManager : MonoBehaviour {
     public float startXPosition;
     public float yPositionMax;
     public StatManager statManager;
-    public BoxCollider cullingBox;
+    public Transform removingPoint;
+    public GameObject player;
 
     private List<GameObject> resourcePool;
     private float elapsedTime = 0;
@@ -62,9 +63,33 @@ public class ObjectManager : MonoBehaviour {
             }
         }
 
+        var d = Input.GetAxis("Mouse ScrollWheel");
+        if (d > 0f)
+        {
+            foreach (var meteor in resourcePool)
+            {
+                meteor.transform.localScale *= 2;
+
+                meteor.transform.position = (meteor.transform.position - player.transform.position) * 2;
+            }
+            player.transform.localScale *= 2;
+
+
+        }
+        else if (d < 0f)
+        {
+            foreach (var meteor in resourcePool)
+            {
+                meteor.transform.localScale /= 2;
+                meteor.transform.position = (meteor.transform.position - player.transform.position) / 2;
+            }
+
+            player.transform.localScale /= 2;
+        }
+
         foreach (var meteor in resourcePool)
         {
-            if(meteor.activeSelf && !cullingBox.bounds.Contains(meteor.transform.position))
+            if(meteor.activeSelf && meteor.transform.position.x < removingPoint.position.x)
             {
                 // Debug.Log("Metor OUT!");
                 meteor.SetActive(false);
