@@ -66,39 +66,42 @@ public class ObjectManager : MonoBehaviour {
         var d = Input.GetAxis("Mouse ScrollWheel");
         if (d > 0f)
         {
-            foreach (var meteor in resourcePool)
+            foreach (var resource in resourcePool)
             {
-                meteor.transform.localScale *= 2;
+                resource.transform.localScale *= 2;
 
-                meteor.transform.position = (meteor.transform.position - player.transform.position) * 2;
+                float x = (resource.transform.position.x - player.transform.position.x) * 2;
+                float y = (resource.transform.position.y - player.transform.position.y) * 2;
+                resource.transform.position = new Vector3(x, y, resource.transform.position.z);
             }
             player.transform.localScale *= 2;
-
+            statManager.ZoomInOutByStep(1);
 
         }
         else if (d < 0f)
         {
-            foreach (var meteor in resourcePool)
+            foreach (var resource in resourcePool)
             {
-                meteor.transform.localScale /= 2;
-                float x = (meteor.transform.position.x - player.transform.position.x) / 2;
-                float y = (meteor.transform.position.y - player.transform.position.y) / 2;
-                meteor.transform.position = new Vector3(x, y, meteor.transform.position.z);
+                resource.transform.localScale /= 2;
+                float x = (resource.transform.position.x - player.transform.position.x) / 2;
+                float y = (resource.transform.position.y - player.transform.position.y) / 2;
+                resource.transform.position = new Vector3(x, y, resource.transform.position.z);
             }
 
             player.transform.localScale /= 2;
+            statManager.ZoomInOutByStep(-1);
         }
 
-        foreach (var meteor in resourcePool)
+        foreach (var resource in resourcePool)
         {
-            if(meteor.activeSelf && meteor.transform.position.x < removingPoint.position.x)
+            if(resource.activeSelf && resource.transform.position.x < removingPoint.position.x)
             {
                 // Debug.Log("Metor OUT!");
-                meteor.SetActive(false);
-                freeObjectIndex.Enqueue(resourcePool.IndexOf(meteor));
+                resource.SetActive(false);
+                freeObjectIndex.Enqueue(resourcePool.IndexOf(resource));
             }
             float scrollSpeed = statManager.GetScrollSpeed();
-            meteor.transform.position -= new Vector3(scrollSpeed, 0, 0) * Time.deltaTime;
+            resource.transform.position -= new Vector3(scrollSpeed, 0, 0) * Time.deltaTime;
         }
 
     }
