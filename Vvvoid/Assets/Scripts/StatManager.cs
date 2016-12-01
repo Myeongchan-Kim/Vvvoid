@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using System;
+using Com.Google.Android.Gms.Games;
 
 public class StatManager : MonoBehaviour {
 
@@ -16,6 +17,8 @@ public class StatManager : MonoBehaviour {
     double _fuelConsumtionForEachTouch = 10.0;
     int resource;
 
+    public Player player = null;
+
     public Text _distanceUI = null;
     public Text _velocityUI = null;
     public Text _fuelUI = null;
@@ -25,7 +28,9 @@ public class StatManager : MonoBehaviour {
         distance = 0.0;
         _fuelAmout = _maxFuelAmout * 0.5;
         _mass = DEFALT_MASS;
-	}
+
+        Social.ReportScore((long)distance, "CgkI5YeLpasSEAIQAg", (bool sucess) => { if (sucess) Debug.Log("Score Update Success"); else Debug.Log("Scored Update Fail"); });
+    }
 
     string SetText(ref Text target, ref double targetValue, String formatStr)
     {
@@ -38,6 +43,7 @@ public class StatManager : MonoBehaviour {
     }
 
     void Update () {
+
         distance += (double)Time.deltaTime * _velocity;
 
         System.Text.StringBuilder sb = new System.Text.StringBuilder();
@@ -61,13 +67,23 @@ public class StatManager : MonoBehaviour {
             if (consumedEnergy > 0.0)
             {
                 AnimateAccel(consumedEnergy);
+            }else
+            {
+                AnimateNoFuel();
             }
         }
     }
 
-    IEnumerator AnimateAccel(double consumeAmount)
+    void AnimateNoFuel()
     {
-        yield return null;
+        player.NoFuelEffect();
+        return;
+    }
+
+    void AnimateAccel(double consumeAmount)
+    {
+        player.FireRocketEffect();
+        return;
     }
 
     public float GetScrollSpeed() { return (float)(_velocity / Math.Pow(2.0, _currentScaleStep)); }
