@@ -22,6 +22,15 @@ public class StatManager : MonoBehaviour {
             return _maxScaleStep;
         }
     }
+    public double currentTechPoint
+    {
+        get
+        {
+            return _techPoint;
+        }
+    }
+
+    double _techPoint = 0.0f;
     double _currentScaleStep = 0.0f;
     double _maxScaleStep = 10.0f;
     double _velocity;
