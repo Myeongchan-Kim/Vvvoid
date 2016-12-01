@@ -23,9 +23,7 @@ public class LoginLogic : MonoBehaviour
     public Button authButton;
     public Text statusText;
     public bool omitLogin;
-    private const float FontSizeMult = 0.05f;
     private bool mWaitingForAuth = false;
-    private bool dumpedToken = false;
 
     void Start()
     {
@@ -35,9 +33,7 @@ public class LoginLogic : MonoBehaviour
         }
         // Select the Google Play Games platform as our social platform implementation
         GooglePlayGames.PlayGamesPlatform.Activate();
-
-
-
+        
         var buttonText = authButton.GetComponentInChildren<Text>();
 
         buttonText.text = "Authenticate";
@@ -63,6 +59,7 @@ public class LoginLogic : MonoBehaviour
                 else
                 {
                     statusText.text = "Authentication failed.";
+
                 }
             });
         }
