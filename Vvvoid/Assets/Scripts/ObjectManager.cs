@@ -2,42 +2,75 @@
 using UnityEngine;
 
 public class ObjectManager : MonoBehaviour {
+    [SerializeField] private float _startXPosition;
+    [SerializeField] private float _yPositionMax;
+    [SerializeField] private StatManager _statManager;
+    [SerializeField] private Transform _removingPoint;
+    [SerializeField] private GameObject _player;
+    [SerializeField] private Sprite[] _prefabs;
 
-    public GameObject meteorPrefab = null;
-    public float startXPosition;
-    public float yPositionMax;
-    public StatManager statManager;
-    public Transform removingPoint;
-    public GameObject player;
+    private List<GameObject> _resourcePool;
+    private Queue<int> _freeObjectIndex;
+    private float _elapsedTime = 0;
+    private int _lastLevel;
+    private int _prefabMaxLoadCount = 10;
 
-    private List<GameObject> resourcePool;
-    private float elapsedTime = 0;
-    private Queue<int> freeObjectIndex;
+    // Use this for initialization
+    void Start ()
+    {
+        _resourcePool = new List<GameObject>();
+        _freeObjectIndex = new Queue<int>();
 
-	// Use this for initialization
-	void Start () {
-        resourcePool = new List<GameObject>();
-        freeObjectIndex = new Queue<int>();
-        for(int i = 0; i < 30; i++)
+        int scaleFactor = 1;
+        for (int i = 0; i < _prefabs.Length; i++)
         {
-            GameObject obj = Instantiate<GameObject>(meteorPrefab);
-            obj.SetActive(false);
-            resourcePool.Add(obj);
-            freeObjectIndex.Enqueue(i);
+            for (int j = 0; j < _prefabMaxLoadCount; j++)
+            {
+                GameObject obj = new GameObject();
+                SpriteRenderer renderer = obj.AddComponent<SpriteRenderer>();
+                renderer.sprite = _prefabs[i];
+
+                obj.transform.localScale *= scaleFactor;
+                _resourcePool.Add(Instantiate(obj));
+                obj.SetActive(false);
+                _resourcePool.Add(obj);
+            }
+            scaleFactor++;
         }
-	}
-	
-	// Update is called once per frame
-	void Update () {
 
-        elapsedTime += Time.deltaTime;
-        if (elapsedTime > 1)
+        _lastLevel = (int)_statManager.maxScaleStep;
+        for (int i = 0; i < _lastLevel; i++)
         {
-            elapsedTime = 0;
-            int newObjectIndex = freeObjectIndex.Dequeue();
-            GameObject meteor = resourcePool[newObjectIndex];
-            meteor.SetActive(true);
-            meteor.transform.position = new Vector3(startXPosition, Random.Range(-yPositionMax, yPositionMax), 0);
+            for (int j = 0; j < _prefabMaxLoadCount; j++)
+            {
+                _freeObjectIndex.Enqueue(i * 10 + j);
+            }
+        }
+    }
+
+    // Update is called once per frame
+    void Update () {
+        if(_lastLevel < _statManager.maxScaleStep)
+        {
+            _lastLevel = (int)_statManager.maxScaleStep;
+
+            for (int j = 0; j < _prefabMaxLoadCount; j++)
+            {
+                _freeObjectIndex.Enqueue(_lastLevel * 10 + j);
+            }
+        }
+
+        _elapsedTime += Time.deltaTime;
+        if (_elapsedTime > 1)
+        {
+            _elapsedTime = 0;
+            if(_freeObjectIndex.Count > 0)
+            {
+                int newObjectIndex = _freeObjectIndex.Dequeue();
+                GameObject meteor = _resourcePool[newObjectIndex];
+                meteor.SetActive(true);
+                meteor.transform.position = new Vector3(_startXPosition, Random.Range(-_yPositionMax, _yPositionMax), 0);
+            }
         }
         
         if (Input.GetMouseButtonDown(0))
@@ -54,10 +87,10 @@ public class ObjectManager : MonoBehaviour {
                     {
                         Debug.Log("Hit");
                         Resource resource = obj.GetComponent<Resource>();
-                        statManager.AddResource(resource.containingResource);
+                        _statManager.AddResource(resource.containingResource);
 
                         obj.SetActive(false);
-                        freeObjectIndex.Enqueue(resourcePool.IndexOf(obj));
+                        _freeObjectIndex.Enqueue(_resourcePool.IndexOf(obj));
                     }
                 }
             }
@@ -66,41 +99,41 @@ public class ObjectManager : MonoBehaviour {
         var d = Input.GetAxis("Mouse ScrollWheel");
         if (d > 0f)
         {
-            foreach (var resource in resourcePool)
+            foreach (var resource in _resourcePool)
             {
                 resource.transform.localScale *= 2;
 
-                float x = (resource.transform.position.x - player.transform.position.x) * 2;
-                float y = (resource.transform.position.y - player.transform.position.y) * 2;
+                float x = (resource.transform.position.x - -_player.transform.position.x) * 2;
+                float y = (resource.transform.position.y - -_player.transform.position.y) * 2;
                 resource.transform.position = new Vector3(x, y, resource.transform.position.z);
             }
-            player.transform.localScale *= 2;
-            statManager.ZoomInOutByStep(1);
+            _player.transform.localScale *= 2;
+            _statManager.ZoomInOutByStep(1);
 
         }
         else if (d < 0f)
         {
-            foreach (var resource in resourcePool)
+            foreach (var resource in _resourcePool)
             {
                 resource.transform.localScale /= 2;
-                float x = (resource.transform.position.x - player.transform.position.x) / 2;
-                float y = (resource.transform.position.y - player.transform.position.y) / 2;
+                float x = (resource.transform.position.x - -_player.transform.position.x) / 2;
+                float y = (resource.transform.position.y - -_player.transform.position.y) / 2;
                 resource.transform.position = new Vector3(x, y, resource.transform.position.z);
             }
 
-            player.transform.localScale /= 2;
-            statManager.ZoomInOutByStep(-1);
+            _player.transform.localScale /= 2;
+            _statManager.ZoomInOutByStep(-1);
         }
 
-        foreach (var resource in resourcePool)
+        foreach (var resource in _resourcePool)
         {
-            if(resource.activeSelf && resource.transform.position.x < removingPoint.position.x)
+            if(resource.activeSelf && resource.transform.position.x < _removingPoint.position.x)
             {
                 // Debug.Log("Metor OUT!");
                 resource.SetActive(false);
-                freeObjectIndex.Enqueue(resourcePool.IndexOf(resource));
+                _freeObjectIndex.Enqueue(_resourcePool.IndexOf(resource));
             }
-            float scrollSpeed = statManager.GetScrollSpeed();
+            float scrollSpeed = _statManager.GetScrollSpeed();
             resource.transform.position -= new Vector3(scrollSpeed, 0, 0) * Time.deltaTime;
         }
 

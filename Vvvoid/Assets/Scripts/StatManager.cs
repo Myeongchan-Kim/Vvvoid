@@ -8,7 +8,22 @@ public class StatManager : MonoBehaviour {
 
     public const double DEFALT_SPEED = 1.0;
     public const double DEFALT_MASS = 10;
-    double _currentScaleStep = 0.0;
+    public double currentScaleStep
+    {
+        get
+        {
+            return _currentScaleStep;
+        }
+    }
+    public double maxScaleStep
+    {
+        get
+        {
+            return _maxScaleStep;
+        }
+    }
+    double _currentScaleStep = 0.0f;
+    double _maxScaleStep = 10.0f;
     double _velocity;
     public double distance { get; private set; }
     double _fuelAmout;
