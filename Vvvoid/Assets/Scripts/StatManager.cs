@@ -32,6 +32,8 @@ public class StatManager : MonoBehaviour {
     double _fuelConsumtionForEachTouch = 10.0;
     int resource;
 
+    public Player player = null;
+
     public Text _distanceUI = null;
     public Text _velocityUI = null;
     public Text _fuelUI = null;
@@ -80,13 +82,23 @@ public class StatManager : MonoBehaviour {
             if (consumedEnergy > 0.0)
             {
                 AnimateAccel(consumedEnergy);
+            }else
+            {
+                AnimateNoFuel();
             }
         }
     }
 
-    IEnumerator AnimateAccel(double consumeAmount)
+    void AnimateNoFuel()
     {
-        yield return null;
+        player.NoFuelEffect();
+        return;
+    }
+
+    void AnimateAccel(double consumeAmount)
+    {
+        player.FireRocketEffect();
+        return;
     }
 
     public float GetScrollSpeed() { return (float)(_velocity / Math.Pow(2.0, _currentScaleStep)); }
