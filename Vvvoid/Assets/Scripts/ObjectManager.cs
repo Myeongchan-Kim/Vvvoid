@@ -7,7 +7,8 @@ public class ObjectManager : MonoBehaviour {
     public float startXPosition;
     public float yPositionMax;
     public StatManager statManager;
-    public BoxCollider cullingBox;
+    public Transform removingPoint;
+    public GameObject player;
 
     private List<GameObject> resourcePool;
     private float elapsedTime = 0;
@@ -62,16 +63,45 @@ public class ObjectManager : MonoBehaviour {
             }
         }
 
-        foreach (var meteor in resourcePool)
+        var d = Input.GetAxis("Mouse ScrollWheel");
+        if (d > 0f)
         {
-            if(meteor.activeSelf && !cullingBox.bounds.Contains(meteor.transform.position))
+            foreach (var resource in resourcePool)
+            {
+                resource.transform.localScale *= 2;
+
+                float x = (resource.transform.position.x - player.transform.position.x) * 2;
+                float y = (resource.transform.position.y - player.transform.position.y) * 2;
+                resource.transform.position = new Vector3(x, y, resource.transform.position.z);
+            }
+            player.transform.localScale *= 2;
+            statManager.ZoomInOutByStep(1);
+
+        }
+        else if (d < 0f)
+        {
+            foreach (var resource in resourcePool)
+            {
+                resource.transform.localScale /= 2;
+                float x = (resource.transform.position.x - player.transform.position.x) / 2;
+                float y = (resource.transform.position.y - player.transform.position.y) / 2;
+                resource.transform.position = new Vector3(x, y, resource.transform.position.z);
+            }
+
+            player.transform.localScale /= 2;
+            statManager.ZoomInOutByStep(-1);
+        }
+
+        foreach (var resource in resourcePool)
+        {
+            if(resource.activeSelf && resource.transform.position.x < removingPoint.position.x)
             {
                 // Debug.Log("Metor OUT!");
-                meteor.SetActive(false);
-                freeObjectIndex.Enqueue(resourcePool.IndexOf(meteor));
+                resource.SetActive(false);
+                freeObjectIndex.Enqueue(resourcePool.IndexOf(resource));
             }
             float scrollSpeed = statManager.GetScrollSpeed();
-            meteor.transform.position -= new Vector3(scrollSpeed, 0, 0) * Time.deltaTime;
+            resource.transform.position -= new Vector3(scrollSpeed, 0, 0) * Time.deltaTime;
         }
 
     }
