@@ -32,7 +32,7 @@ public class StatManager : MonoBehaviour {
 
     double _techPoint = 0.0f;
     double _currentScaleStep = 0.0f;
-    double _maxScaleStep = 10.0f;
+    double _maxScaleStep = 0.0f;
     double _velocity;
     public double distance { get; private set; }
     double _fuelAmout;
@@ -123,6 +123,9 @@ public class StatManager : MonoBehaviour {
     public void ZoomInOutByStep(double step) //times == 10 means 10 times. times == 0.1 means 10% zoom out
     {
         _currentScaleStep += step;
+        if (maxScaleStep < _currentScaleStep)
+            _maxScaleStep = _currentScaleStep;
+
     }
 
     public void ZoomInOutRealScale(double times)

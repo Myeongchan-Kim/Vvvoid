@@ -4,6 +4,8 @@ using System.Collections;
 public class Resource : MonoBehaviour {
 
     public int containingResource;
+    public int levelToReveal;
+    public bool isExhausted;
 
 	// Use this for initialization
 	void Start () {
