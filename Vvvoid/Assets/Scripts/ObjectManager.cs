@@ -2,19 +2,22 @@
 using UnityEngine;
 
 public class ObjectManager : MonoBehaviour {
-    [SerializeField] private float _startXPosition;
-    [SerializeField] private float _yPositionMax;
+    [SerializeField] private Transform _startXTransform;
+    [SerializeField] private Transform _startYTransform;
     [SerializeField] private StatManager _statManager;
     [SerializeField] private Transform _removingPoint;
     [SerializeField] private GameObject _player;
     [SerializeField] private Sprite[] _prefabs;
 
+    private float _startXPosition;
+    private float _startYPosition;
     private List<GameObject> _resourcePool;
     private Queue<int> _inactiveResourceIndexes;
     private List<int> _activeResourceIndexes;
     private float _elapsedTime = 0;
     private int _lastLevel;
-    private int _prefabMaxLoadCount = 10;
+    private int _prefabMaxLoadCount = 20;
+    private int _preLoadingLevelInterval = 1;
     
     void Start ()
     {
@@ -22,16 +25,24 @@ public class ObjectManager : MonoBehaviour {
         _inactiveResourceIndexes = new Queue<int>();
         _activeResourceIndexes = new List<int>();
 
+        _startXPosition = _startXTransform.position.x * 2;
+        _startYPosition = _startYTransform.position.y * 2;
+
         MakeObjectPool();
 
         _lastLevel = (int)_statManager.maxScaleStep;
-        for (int i = 0; i <= _lastLevel; i++)
+        for (int i = 0; i <= _lastLevel + _preLoadingLevelInterval; i++)
         {
             for (int j = 0; j < _prefabMaxLoadCount; j++)
             {
-                _inactiveResourceIndexes.Enqueue(i * _prefabMaxLoadCount + j);
+                int newObjectIndex = i * _prefabMaxLoadCount + j;
+                GameObject meteor = _resourcePool[newObjectIndex];
+                meteor.SetActive(true);
+                meteor.transform.position = new Vector3(Random.Range(-_startXPosition, _startXPosition), Random.Range(-_startYPosition, _startYPosition), 0);
+                _activeResourceIndexes.Add(newObjectIndex);
             }
         }
+       
     }
 
     void MakeObjectPool()
@@ -66,9 +77,25 @@ public class ObjectManager : MonoBehaviour {
         {
             _lastLevel = (int)_statManager.maxScaleStep;
 
-            for (int j = 0; j < _prefabMaxLoadCount; j++)
+            lock (_inactiveResourceIndexes)
             {
-                _inactiveResourceIndexes.Enqueue(_lastLevel * _prefabMaxLoadCount + j);
+                _inactiveResourceIndexes.Clear();
+
+                if (_lastLevel + _preLoadingLevelInterval < _prefabs.Length)
+                {
+                    List<int> indexes = new List<int>();
+                    for (int j = 0; j < _prefabMaxLoadCount * (_lastLevel + 1); j++)
+                    {
+                        indexes.Add(j);
+                    }
+
+                    indexes.Sort((x, y) => Random.value < 0.5f ? -1 : 1);
+
+                    for (int j = 0; j < _prefabMaxLoadCount * (_lastLevel + 1); j++)
+                    {
+                        _inactiveResourceIndexes.Enqueue(indexes[j]);
+                    }
+                }
             }
         }
 
@@ -83,27 +110,12 @@ public class ObjectManager : MonoBehaviour {
                 int newObjectIndex = _inactiveResourceIndexes.Dequeue();
                 GameObject meteor = _resourcePool[newObjectIndex];
                 meteor.SetActive(true);
-                meteor.transform.position = new Vector3(_startXPosition, Random.Range(-_yPositionMax, _yPositionMax), 0);
+                meteor.transform.position = new Vector3(_startXPosition, Random.Range(-_startYPosition, _startYPosition), 0);
                 _activeResourceIndexes.Add(newObjectIndex);
             }
         }
 
-        foreach(var index in _activeResourceIndexes)
-        {
-            GameObject obj = _resourcePool[index];
-            Resource resource = obj.GetComponent<Resource>();
-            if (resource.levelToReveal > _statManager.currentScaleStep + 1 
-                || resource.levelToReveal < _statManager.currentScaleStep - 1)
-            {
-                if(!resource.isExhausted)
-                    obj.SetActive(false);
-            }
-            else
-            {
-                if (!resource.isExhausted)
-                    obj.SetActive(true);
-            }
-        }
+        
         
         if (Input.GetMouseButtonDown(0))
         {
@@ -127,6 +139,32 @@ public class ObjectManager : MonoBehaviour {
             }
         }
 
+        UpdateObjectsScale();
+
+    }
+
+    void UpdateActiveObjects()
+    {
+        foreach (var index in _activeResourceIndexes)
+        {
+            GameObject obj = _resourcePool[index];
+            Resource resource = obj.GetComponent<Resource>();
+            if (resource.levelToReveal > _statManager.currentScaleStep + 1
+                || resource.levelToReveal < _statManager.currentScaleStep - 1)
+            {
+                if (!resource.isExhausted)
+                    obj.SetActive(false);
+            }
+            else
+            {
+                if (!resource.isExhausted)
+                    obj.SetActive(true);
+            }
+        }
+    }
+
+    void UpdateObjectsScale()
+    {
         var d = Input.GetAxis("Mouse ScrollWheel");
         if (d > 0f)
         {
@@ -140,6 +178,7 @@ public class ObjectManager : MonoBehaviour {
             }
             _player.transform.localScale *= 2;
             _statManager.ZoomInOutByStep(-1);
+            UpdateActiveObjects();
 
         }
         else if (d < 0f)
@@ -154,11 +193,12 @@ public class ObjectManager : MonoBehaviour {
 
             _player.transform.localScale /= 2;
             _statManager.ZoomInOutByStep(1);
+            UpdateActiveObjects();
         }
 
         foreach (var resource in _resourcePool)
         {
-            if(resource.activeSelf && resource.transform.position.x < _removingPoint.position.x)
+            if (resource.activeSelf && resource.transform.position.x < _removingPoint.position.x)
             {
                 // Debug.Log("Metor OUT!");
                 resource.SetActive(false);
@@ -169,6 +209,5 @@ public class ObjectManager : MonoBehaviour {
             float scrollSpeed = _statManager.GetScrollSpeed();
             resource.transform.position -= new Vector3(scrollSpeed, 0, 0) * Time.deltaTime;
         }
-
     }
 }
