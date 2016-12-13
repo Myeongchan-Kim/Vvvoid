@@ -25,8 +25,8 @@ public class ObjectManager : MonoBehaviour {
         _inactiveResourceIndexes = new Queue<int>();
         _activeResourceIndexes = new List<int>();
 
-        _startXPosition = _startXTransform.position.x * 2;
-        _startYPosition = _startYTransform.position.y * 2;
+        _startXPosition = _startXTransform.position.x;
+        _startYPosition = _startYTransform.position.y;
 
         MakeObjectPool();
 
@@ -76,25 +76,26 @@ public class ObjectManager : MonoBehaviour {
         if (_lastLevel < _statManager.maxScaleStep)
         {
             _lastLevel = (int)_statManager.maxScaleStep;
-
-            lock (_inactiveResourceIndexes)
+            int currentLoadingLevel = _lastLevel + _preLoadingLevelInterval;
+            if (currentLoadingLevel < _prefabs.Length)
             {
+                List<int> indexes = new List<int>();
+                foreach(var index in _inactiveResourceIndexes)
+                {
+                    indexes.Add(index);
+                }
                 _inactiveResourceIndexes.Clear();
 
-                if (_lastLevel + _preLoadingLevelInterval < _prefabs.Length)
+                for (int i = _prefabMaxLoadCount * currentLoadingLevel + 1; i <= _prefabMaxLoadCount * (currentLoadingLevel + 1); i++)
                 {
-                    List<int> indexes = new List<int>();
-                    for (int j = 0; j < _prefabMaxLoadCount * (_lastLevel + 1); j++)
-                    {
-                        indexes.Add(j);
-                    }
+                    indexes.Add(i);
+                }
 
-                    indexes.Sort((x, y) => Random.value < 0.5f ? -1 : 1);
+                indexes.Sort((x, y) => Random.value < 0.5f ? -1 : 1);
 
-                    for (int j = 0; j < _prefabMaxLoadCount * (_lastLevel + 1); j++)
-                    {
-                        _inactiveResourceIndexes.Enqueue(indexes[j]);
-                    }
+                for (int i = 0; i < _prefabMaxLoadCount * (_lastLevel + 1); i++)
+                {
+                    _inactiveResourceIndexes.Enqueue(indexes[i]);
                 }
             }
         }
