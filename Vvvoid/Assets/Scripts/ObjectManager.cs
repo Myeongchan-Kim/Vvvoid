@@ -38,7 +38,7 @@ public class ObjectManager : MonoBehaviour {
                 int newObjectIndex = i * _prefabMaxLoadCount + j;
                 GameObject meteor = _resourcePool[newObjectIndex];
                 meteor.SetActive(true);
-                meteor.transform.position = new Vector3(Random.Range(-_startXPosition, _startXPosition), Random.Range(-_startYPosition, _startYPosition), 0);
+                meteor.transform.position = new Vector3(Random.Range(-_startXPosition * 2, _startXPosition * 2), Random.Range(-_startYPosition * 2, _startYPosition * 2), 0);
                 _activeResourceIndexes.Add(newObjectIndex);
             }
         }
@@ -101,7 +101,7 @@ public class ObjectManager : MonoBehaviour {
         }
 
         _elapsedTime += Time.deltaTime;
-        if (_elapsedTime > 1)
+        if (_elapsedTime > 1 / _statManager.GetScrollSpeed())
         {
             Debug.Log("On Level " + _statManager.currentScaleStep);
             Debug.Log("Max Level " + _statManager.maxScaleStep);
@@ -111,7 +111,7 @@ public class ObjectManager : MonoBehaviour {
                 int newObjectIndex = _inactiveResourceIndexes.Dequeue();
                 GameObject meteor = _resourcePool[newObjectIndex];
                 meteor.SetActive(true);
-                meteor.transform.position = new Vector3(_startXPosition, Random.Range(-_startYPosition, _startYPosition), 0);
+                meteor.transform.position = new Vector3(Random.Range(_startXPosition, _startXPosition * 2), Random.Range(-_startYPosition * 2, _startYPosition * 2), 0);
                 _activeResourceIndexes.Add(newObjectIndex);
             }
         }
