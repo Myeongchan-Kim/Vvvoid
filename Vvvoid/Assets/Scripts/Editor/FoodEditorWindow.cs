@@ -44,6 +44,7 @@ public class FoodEditorWindow : EditorWindow
 
     void ShowFoodListOnWindow()
     {
+
         GUILayout.Label("Foodlist stats");
         GUILayout.Space(10);
 
@@ -90,8 +91,7 @@ public class FoodEditorWindow : EditorWindow
             double newTech = EditorGUILayout.DoubleField(foodi.baseTechPoint);
 
             EditorGUILayout.EndHorizontal();
-
-            if(newFuel != foodi.baseFuelPoint ||
+            if (newFuel != foodi.baseFuelPoint ||
                newMass != foodi.baseMassPoint ||
                newTech != foodi.baseTechPoint )
             {
@@ -105,18 +105,53 @@ public class FoodEditorWindow : EditorWindow
 
     bool IsFoodDataFile(string fileName)
     {
-        
-        return false;
+        Debug.Log(" ========== Chekc!!");
+        Debug.Log(PlayerPrefs.HasKey("baseFuel.0"));
+        if (PlayerPrefs.HasKey("baseFuel.0"))
+            return true;
+        else
+            return false;
     }
 
     void SaveFood(string fileName)
     {
+        for( int i = 0; i < foodListSize; i++)
+        {
+            System.Text.StringBuilder sb = new System.Text.StringBuilder();
+            sb.Length = 0;
 
+            sb.AppendFormat("%f", foodInfoList[i].baseFuelPoint);
+            PlayerPrefs.SetString("baseFuel.i", sb.ToString());
+            sb.Length = 0;
+
+            sb.AppendFormat("%f", foodInfoList[i].baseMassPoint);
+            PlayerPrefs.SetString("baseMass.i", sb.ToString());
+            sb.Length = 0;
+
+            sb.AppendFormat("%f", foodInfoList[i].baseTechPoint);
+            PlayerPrefs.SetString("baseTech.i", sb.ToString());
+            sb.Length = 0;
+        }
+        PlayerPrefs.Save();
+        Debug.Log("================== Data saved.");
     }
 
     void LoadFood(string fileName)
     {
+        for (int i = 0; i < foodListSize; i++)
+        {
+            String val_str = PlayerPrefs.GetString(string.Format("baseFuel.{0}", i));
+            double value = Convert.ToDouble(val_str);
+            foodInfoList[i].baseFuelPoint = value;
 
+            val_str = PlayerPrefs.GetString(string.Format("baseMass.{0}", i));
+            value = Convert.ToDouble(val_str);
+            foodInfoList[i].baseMassPoint = value;
+
+            val_str = PlayerPrefs.GetString(string.Format("baseTech.{0}", i));
+            value = Convert.ToDouble(val_str);
+            foodInfoList[i].baseTechPoint = value;
+        }
     }
 
     void InitFood()
