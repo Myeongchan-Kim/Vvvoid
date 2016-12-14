@@ -9,9 +9,13 @@ public class FoodEditor : Editor
 
     void OnEnable()
     {
-        Debug.Log("OnEnable");
+        Food windowInfo = target as Food;
         window = EditorWindow.GetWindow<FoodEditorWindow>("Food Editor");
-        //window.title  = Meuw1;
+        window.title  = "Food Editor";
+        window.position = new Rect(20, 40, 500, 700);
+        window.foodInfoList = windowInfo.FoodDatas;
+        window.multiplyConstant = windowInfo.multiplyConstant;
+        
     }
 
     void OnDisable()
