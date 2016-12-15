@@ -1,10 +1,11 @@
 fileFormatVersion: 2
-guid: 460ee104b730b504788c48d084d9105f
-timeCreated: 1480503809
+guid: 864fc9d4b3e5205479bf5ba21202394c
+timeCreated: 1479615983
 licenseType: Free
 MonoImporter:
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - meteorPrefab: {fileID: 100000, guid: 7d5f7699d6d1d48e485ac71126e12061, type: 2}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 
