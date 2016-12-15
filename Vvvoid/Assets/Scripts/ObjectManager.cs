@@ -58,7 +58,6 @@ public class ObjectManager : MonoBehaviour {
                 Resource resource = obj.AddComponent<Resource>();
                 resource.levelToReveal = i;
                 resource.isExhausted = false;
-                resource.containingResource = i;
                 BoxCollider2D box = obj.AddComponent<BoxCollider2D>();
 
                 obj.transform.localScale *= scaleFactor;

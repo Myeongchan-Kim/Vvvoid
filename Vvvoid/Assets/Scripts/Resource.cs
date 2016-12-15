@@ -3,18 +3,14 @@ using System.Collections;
 
 public class Resource : MonoBehaviour {
 
-    public int containingResource;
+    public double containingResource;
+    public double containingTech;
+    public double containingMass;
     public int levelToReveal;
     public bool isExhausted;
 
-	// Use this for initialization
+    public Food foodDb;
+
 	void Start () {
-	
 	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
-    
 }

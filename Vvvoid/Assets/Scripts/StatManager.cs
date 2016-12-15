@@ -39,7 +39,7 @@ public class StatManager : MonoBehaviour {
     public double _maxFuelAmout;
     double _mass;
     double _fuelConsumtionForEachTouch = 10.0;
-    int resource;
+    double resource;
 
     public Player player = null;
 
@@ -160,7 +160,7 @@ public class StatManager : MonoBehaviour {
         return curVelocity;
     }
 
-    public double GetFuel(double getAmout)
+    public double AddFuel(double getAmout)
     {
         if (getAmout + _fuelAmout < _maxFuelAmout)
             _fuelAmout += getAmout;
@@ -170,12 +170,24 @@ public class StatManager : MonoBehaviour {
         return _fuelAmout;
     }
 
-    public void AddResource(int resource)
+    public double AddTech(double getTechAmount)
+    {
+        _techPoint += getTechAmount;
+        return _techPoint;
+    }
+
+    public double AddMass(double getMassAmount)
+    {
+        _mass += getMassAmount;
+        return _mass;
+    } 
+
+    public void AddResource(double resource)
     {
         this.resource += resource;
     }
 
-    public int GetResource()
+    public double GetResource()
     {
         return resource;
     }
