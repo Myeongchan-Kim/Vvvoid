@@ -7,7 +7,6 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private ObjectManager _objManager;
     [SerializeField] private Transform _removingPoint;
     [SerializeField] private GameObject _player;
-    [SerializeField] private Sprite[] _prefabs;
 
     private float _startXPosition;
     private float _startYPosition;
