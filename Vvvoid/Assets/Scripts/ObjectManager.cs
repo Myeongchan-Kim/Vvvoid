@@ -174,6 +174,7 @@ public class ObjectManager : MonoBehaviour {
             {
                 MoveManager.MetorChangingScaleMove(resource, d, _player);
             }
+
             _player.transform.localScale *= 2;
             _statManager.ZoomInOutByStep(-1);
             UpdateActiveObjects();

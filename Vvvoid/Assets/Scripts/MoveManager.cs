@@ -1,25 +1,38 @@
 ﻿using UnityEngine;
 using System.Collections;
+using DG.Tweening;
 
 public class MoveManager : MonoBehaviour {
-
-	public static void MetorChangingScaleMove(GameObject resource, float d , GameObject player)
+    public void Start()
     {
-        if( d > 0)
-        {
-            resource.transform.localScale *= 2;
+        DOTween.Init();
+    }
 
-            float x = (resource.transform.position.x - player.transform.position.x) * 2;
-            float y = (resource.transform.position.y - player.transform.position.y) * 2;
-            resource.transform.position = new Vector3(x, y, resource.transform.position.z);
+    public static void MetorChangingScaleMove(GameObject resource, float wheelIntensity , GameObject player)
+    {
+        float xOffset = (resource.transform.position.x - player.transform.position.x);
+        float yOffset = (resource.transform.position.y - player.transform.position.y);
+        Vector3 newScale = resource.transform.localScale;
 
-        }
-        else if(d < 0)
+        if (wheelIntensity > 0)
         {
-            resource.transform.localScale /= 2;
-            float x = (resource.transform.position.x - player.transform.position.x) / 2;
-            float y = (resource.transform.position.y - player.transform.position.y) / 2;
-            resource.transform.position = new Vector3(x, y, resource.transform.position.z);
+            newScale *= 2;
+            xOffset *= 2;
+            yOffset *= 2;
         }
+        else if(wheelIntensity < 0)
+        {
+            newScale /= 2;
+            xOffset /= 2;
+            yOffset /= 2;
+        }
+
+        resource.transform.DOMove(new Vector3(xOffset, yOffset, resource.transform.position.z), 0.5f);
+        resource.transform.DOScale(newScale, 0.5f);
+    }
+
+    public void ScaleChange(GameObject obj, float targetScale)
+    {
+
     }
 }
