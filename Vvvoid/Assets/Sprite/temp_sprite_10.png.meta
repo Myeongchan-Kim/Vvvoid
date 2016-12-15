@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: dc63c96350b1c0846a9cf3d468b89fb6
-timeCreated: 1479996916
+timeCreated: 1481195882
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -57,8 +57,8 @@ TextureImporter:
       name: tmp_texture 1_0
       rect:
         serializedVersion: 2
-        x: 34
-        y: 289
+        x: 302
+        y: 290
         width: 36
         height: 28
       alignment: 0

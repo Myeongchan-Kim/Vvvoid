@@ -169,6 +169,7 @@ public class ObjectManager : MonoBehaviour {
         var d = Input.GetAxis("Mouse ScrollWheel");
         if (d > 0f)
         {
+
             foreach (var resource in _resourcePool)
             {
                 resource.transform.localScale *= 2;
