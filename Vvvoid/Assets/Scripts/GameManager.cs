@@ -86,6 +86,7 @@ public class GameManager : MonoBehaviour {
         }
 
         UpdateObjectsScale();
+        UpdateObjectPostition();
 
     }
 
@@ -117,26 +118,29 @@ public class GameManager : MonoBehaviour {
             Debug.Log("D: " + d);
             foreach (var resource in _objManager.ResourcePool)
             {
-                MoveManager.MetorChangingScaleMove(resource, d, _player);
+                EffectManager.MetorUpScale(resource, _player);
             }
-            _player.transform.localScale *= 2;
+
+            EffectManager.ScaleChange(_player, 2.0f);
             _statManager.ZoomInOutByStep(-1);
             UpdateActiveObjects();
 
         }
         else if (d < 0f)
         {
-            Debug.Log("D: " + d);
             foreach (var resource in _objManager.ResourcePool)
             {
-                MoveManager.MetorChangingScaleMove(resource, d, _player);
+                EffectManager.MeteorDownScale(resource, _player);
             }
 
-            _player.transform.localScale /= 2;
+            EffectManager.ScaleChange(_player, 0.5f);
             _statManager.ZoomInOutByStep(1);
             UpdateActiveObjects();
         }
+    }
 
+    void UpdateObjectPostition()
+    {
         foreach (var resource in _objManager.ResourcePool)
         {
             if (resource.activeSelf && resource.transform.position.x < _removingPoint.position.x)
@@ -151,4 +155,5 @@ public class GameManager : MonoBehaviour {
             resource.transform.position -= new Vector3(scrollSpeed, 0, 0) * Time.deltaTime;
         }
     }
+
 }
