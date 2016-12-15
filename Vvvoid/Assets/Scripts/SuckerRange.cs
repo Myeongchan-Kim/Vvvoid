@@ -16,6 +16,7 @@ public class SuckerUpgrade
 }
 
 public class SuckerRange : MonoBehaviour {
+    [SerializeField]
     private GameObject DefulatRangeChecker;
     public double suckableRange { get; private set; }
 
@@ -33,6 +34,7 @@ public class SuckerRange : MonoBehaviour {
 
     void ApplyUpgrade()
     {
+        suckableRange = DefulatRangeChecker.transform.position.z;
         foreach (SuckerUpgrade upgrade in upgradedList)
         {
             suckableRange *= upgrade.multiply;
