@@ -2,14 +2,14 @@
 using System.Collections;
 using UnityEditor;
 
-[CustomEditor(typeof(Food))]
+[CustomEditor(typeof(FoodManager))]
 public class FoodEditor : Editor
 {
     FoodEditorWindow window;
 
     void OnEnable()
     {
-        Food windowInfo = target as Food;
+        FoodManager windowInfo = target as FoodManager;
         window = EditorWindow.GetWindow<FoodEditorWindow>("Food Editor");
         window.title  = "Food Editor";
         window.position = new Rect(20, 40, 500, 700);

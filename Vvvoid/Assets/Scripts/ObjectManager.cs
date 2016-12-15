@@ -4,24 +4,24 @@ using System.Collections.Generic;
 
 public class ObjectManager : MonoBehaviour {
 
-    public List<GameObject> ResourcePool { get { return _resourcePool; } }
-    public Queue<int> InactiveResourceIndexes { get { return _inactiveResourceIndexes; } }
-    public List<int> ActiveResourceIndexes { get { return _activeResourceIndexes; } }
+    public List<GameObject> foodPool { get { return _foodPool; } }
+    public Queue<int> InactiveFoodIndexes { get { return _inactiveFoodIndexes; } }
+    public List<int> ActiveFoodIndexes { get { return _activeFoodIndexes; } }
 
     [SerializeField] private StatManager _statManager;
     [SerializeField] private Sprite[] _prefabs;
     
-    private List<GameObject> _resourcePool;
-    private Queue<int> _inactiveResourceIndexes;
-    private List<int> _activeResourceIndexes;
+    private List<GameObject> _foodPool;
+    private Queue<int> _inactiveFoodIndexes;
+    private List<int> _activeFoodIndexes;
     private int _prefabMaxLoadCount = 20;
     private int _preLoadingLevelInterval = 1;
 
     void Start()
     {
-        _resourcePool = new List<GameObject>();
-        _inactiveResourceIndexes = new Queue<int>();
-        _activeResourceIndexes = new List<int>();
+        _foodPool = new List<GameObject>();
+        _inactiveFoodIndexes = new Queue<int>();
+        _activeFoodIndexes = new List<int>();
     }
 
     public void MakeObjects()
@@ -34,16 +34,16 @@ public class ObjectManager : MonoBehaviour {
                 GameObject obj = new GameObject();
                 SpriteRenderer renderer = obj.AddComponent<SpriteRenderer>();
                 renderer.sprite = _prefabs[i];
-                Resource resource = obj.AddComponent<Resource>();
-                resource.levelToReveal = i;
-                resource.isExhausted = false;
+                Food newFood = obj.AddComponent<Food>();
+                newFood.levelToReveal = i;
+                newFood.isExhausted = false;
                 BoxCollider2D box = obj.AddComponent<BoxCollider2D>();
 
                 obj.transform.localScale *= scaleFactor;
                 obj.SetActive(false);
-                _resourcePool.Add(obj);
-                obj.name = "level " + i + " resource";
-                obj.transform.tag = "Resource";
+                _foodPool.Add(obj);
+                obj.name = "level " + i + " Food";
+                obj.transform.tag = "Food";
             }
             scaleFactor++;
         }
@@ -51,7 +51,7 @@ public class ObjectManager : MonoBehaviour {
 
     public int GetIndexOfObject(GameObject obj)
     {
-        return _resourcePool.IndexOf(obj);
+        return _foodPool.IndexOf(obj);
     }
 
     public void LoadNewLevelObjects(int currentLoadingLevel)
@@ -59,11 +59,11 @@ public class ObjectManager : MonoBehaviour {
         if (currentLoadingLevel < _prefabs.Length)
         {
             List<int> indexes = new List<int>();
-            foreach (var index in _inactiveResourceIndexes)
+            foreach (var index in _inactiveFoodIndexes)
             {
                 indexes.Add(index);
             }
-            _inactiveResourceIndexes.Clear();
+            _inactiveFoodIndexes.Clear();
 
             for (int i = _prefabMaxLoadCount * currentLoadingLevel + 1; i <= _prefabMaxLoadCount * (currentLoadingLevel + 1); i++)
             {
@@ -74,7 +74,7 @@ public class ObjectManager : MonoBehaviour {
 
             for (int i = 0; i < _prefabMaxLoadCount * (_statManager.maxScaleStep + 1); i++)
             {
-                _inactiveResourceIndexes.Enqueue(indexes[i]);
+                _inactiveFoodIndexes.Enqueue(indexes[i]);
             }
         }
     }

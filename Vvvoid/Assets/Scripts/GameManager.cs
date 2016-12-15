@@ -29,10 +29,10 @@ public class GameManager : MonoBehaviour {
             for (int j = 0; j < _prefabMaxLoadCount; j++)
             {
                 int newObjectIndex = i * _prefabMaxLoadCount + j;
-                GameObject meteor = _objManager.ResourcePool[newObjectIndex];
+                GameObject meteor = _objManager.foodPool[newObjectIndex];
                 meteor.SetActive(true);
                 meteor.transform.position = new Vector3(Random.Range(-_startXPosition * 2, _startXPosition * 2), Random.Range(-_startYPosition * 2, _startYPosition * 2), 0);
-                _objManager.ActiveResourceIndexes.Add(newObjectIndex);
+                _objManager.ActiveFoodIndexes.Add(newObjectIndex);
             }
         }
     }
@@ -51,13 +51,13 @@ public class GameManager : MonoBehaviour {
             Debug.Log("On Level " + _statManager.currentScaleStep);
             Debug.Log("Max Level " + _statManager.maxScaleStep);
             _elapsedTime = 0;
-            if(_objManager.InactiveResourceIndexes.Count > 0)
+            if(_objManager.InactiveFoodIndexes.Count > 0)
             {
-                int newObjectIndex = _objManager.InactiveResourceIndexes.Dequeue();
-                GameObject meteor = _objManager.ResourcePool[newObjectIndex];
+                int newObjectIndex = _objManager.InactiveFoodIndexes.Dequeue();
+                GameObject meteor = _objManager.foodPool[newObjectIndex];
                 meteor.SetActive(true);
                 meteor.transform.position = new Vector3(Random.Range(_startXPosition, _startXPosition * 2), Random.Range(-_startYPosition * 2, _startYPosition * 2), 0);
-                _objManager.ActiveResourceIndexes.Add(newObjectIndex);
+                _objManager.ActiveFoodIndexes.Add(newObjectIndex);
             }
         }
 
@@ -68,18 +68,19 @@ public class GameManager : MonoBehaviour {
             RaycastHit2D hitInfo = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             if (hitInfo)
             {
-                if (hitInfo.transform.tag == "Resource")
+                if (hitInfo.transform.tag == "Food")
                 {
                     GameObject obj = hitInfo.transform.gameObject;
                     if (obj.activeSelf)
                     {
                         Debug.Log("Hit");
-                        Resource resource = obj.GetComponent<Resource>();
-                        _statManager.AddResource(resource.containingResource);
-                        resource.isExhausted = true;
+                        Food food = obj.GetComponent<Food>();
+                        food.isExhausted = true;
 
-                        obj.SetActive(false);
-                        _objManager.InactiveResourceIndexes.Enqueue(_objManager.GetIndexOfObject(obj));
+                        Sucker sucker = _player.GetComponentInChildren<Sucker>();
+                        sucker.Suck(food);
+                        //obj.SetActive(false);
+                        _objManager.InactiveFoodIndexes.Enqueue(_objManager.GetIndexOfObject(obj));
                     }
                 }
             }
@@ -92,19 +93,19 @@ public class GameManager : MonoBehaviour {
 
     void UpdateActiveObjects()
     {
-        foreach (var index in _objManager.ActiveResourceIndexes)
+        foreach (var index in _objManager.ActiveFoodIndexes)
         {
-            GameObject obj = _objManager.ResourcePool[index];
-            Resource resource = obj.GetComponent<Resource>();
-            if (resource.levelToReveal > _statManager.currentScaleStep + 1
-                || resource.levelToReveal < _statManager.currentScaleStep - 1)
+            GameObject obj = _objManager.foodPool[index];
+            Food food = obj.GetComponent<Food>();
+            if (food.levelToReveal > _statManager.currentScaleStep + 1
+                || food.levelToReveal < _statManager.currentScaleStep - 1)
             {
-                if (!resource.isExhausted)
+                if (!food.isExhausted)
                     obj.SetActive(false);
             }
             else
             {
-                if (!resource.isExhausted)
+                if (!food.isExhausted)
                     obj.SetActive(true);
             }
         }
@@ -116,9 +117,9 @@ public class GameManager : MonoBehaviour {
         if (d > 0f)
         {
             Debug.Log("D: " + d);
-            foreach (var resource in _objManager.ResourcePool)
+            foreach (var food in _objManager.foodPool)
             {
-                EffectManager.MetorUpScale(resource, _player);
+                EffectManager.MetorUpScale(food, _player);
             }
 
             EffectManager.ScaleChange(_player, 2.0f);
@@ -128,9 +129,9 @@ public class GameManager : MonoBehaviour {
         }
         else if (d < 0f)
         {
-            foreach (var resource in _objManager.ResourcePool)
+            foreach (var food in _objManager.foodPool)
             {
-                EffectManager.MeteorDownScale(resource, _player);
+                EffectManager.MeteorDownScale(food, _player);
             }
 
             EffectManager.ScaleChange(_player, 0.5f);
@@ -141,18 +142,18 @@ public class GameManager : MonoBehaviour {
 
     void UpdateObjectPostition()
     {
-        foreach (var resource in _objManager.ResourcePool)
+        foreach (var food in _objManager.foodPool)
         {
-            if (resource.activeSelf && resource.transform.position.x < _removingPoint.position.x)
+            if (food.activeSelf && food.transform.position.x < _removingPoint.position.x)
             {
                 // Debug.Log("Metor OUT!");
-                resource.SetActive(false);
-                int index = _objManager.ResourcePool.IndexOf(resource);
-                _objManager.InactiveResourceIndexes.Enqueue(index);
-                _objManager.ActiveResourceIndexes.Remove(index);
+                food.SetActive(false);
+                int index = _objManager.foodPool.IndexOf(food);
+                _objManager.InactiveFoodIndexes.Enqueue(index);
+                _objManager.ActiveFoodIndexes.Remove(index);
             }
             float scrollSpeed = _statManager.GetScrollSpeed();
-            resource.transform.position -= new Vector3(scrollSpeed, 0, 0) * Time.deltaTime;
+            food.transform.position -= new Vector3(scrollSpeed, 0, 0) * Time.deltaTime;
         }
     }
 
