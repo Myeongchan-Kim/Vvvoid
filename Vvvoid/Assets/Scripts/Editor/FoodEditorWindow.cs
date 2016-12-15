@@ -30,13 +30,7 @@ public class FoodEditorWindow : EditorWindow
 
     void InitMultiply()
     {
-        //multiplyConstant = new StageMultiply[5];
-        //foreach ( StageMultiply mul in multiplyConstant)
-        //{
-        //    mul.scale = 1.0;
-        //    mul.tech = 1.0;
-        //    mul.fuel = 1.0;
-        //}
+        
     }
     void ShowFoodListOnWindow()
     {

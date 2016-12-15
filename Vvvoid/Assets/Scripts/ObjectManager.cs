@@ -4,24 +4,29 @@ using System.Collections.Generic;
 
 public class ObjectManager : MonoBehaviour {
 
-    public List<GameObject> foodPool { get { return _foodPool; } }
+    public List<GameObject> foodPool { get { return _foodObjPool; } }
     public Queue<int> InactiveFoodIndexes { get { return _inactiveFoodIndexes; } }
     public List<int> ActiveFoodIndexes { get { return _activeFoodIndexes; } }
 
     [SerializeField] private StatManager _statManager;
     [SerializeField] private Sprite[] _prefabs;
     
-    private List<GameObject> _foodPool;
+    private List<GameObject> _foodObjPool;
     private Queue<int> _inactiveFoodIndexes;
     private List<int> _activeFoodIndexes;
     private int _prefabMaxLoadCount = 20;
     private int _preLoadingLevelInterval = 1;
 
-    void Start()
+    void OnEnable()
     {
-        _foodPool = new List<GameObject>();
+        _foodObjPool = new List<GameObject>();
         _inactiveFoodIndexes = new Queue<int>();
         _activeFoodIndexes = new List<int>();
+    }
+
+    void Start()
+    {
+        // there is a bug.
     }
 
     public void MakeObjects()
@@ -31,19 +36,25 @@ public class ObjectManager : MonoBehaviour {
         {
             for (int j = 0; j < _prefabMaxLoadCount; j++)
             {
-                GameObject obj = new GameObject();
-                SpriteRenderer renderer = obj.AddComponent<SpriteRenderer>();
+                GameObject foodObj = new GameObject();
+
+                SpriteRenderer renderer = foodObj.AddComponent<SpriteRenderer>();
                 renderer.sprite = _prefabs[i];
-                Food newFood = obj.AddComponent<Food>();
+
+                Food newFood = foodObj.AddComponent<Food>();
                 newFood.levelToReveal = i;
                 newFood.isExhausted = false;
-                BoxCollider2D box = obj.AddComponent<BoxCollider2D>();
 
-                obj.transform.localScale *= scaleFactor;
-                obj.SetActive(false);
-                _foodPool.Add(obj);
-                obj.name = "level " + i + " Food";
-                obj.transform.tag = "Food";
+                BoxCollider2D box = foodObj.AddComponent<BoxCollider2D>();
+
+                foodObj.transform.localScale *= scaleFactor;
+                foodObj.SetActive(false);
+
+                foodObj.name = "level " + i + " Food";
+                foodObj.transform.tag = "Food";
+
+                _foodObjPool.Add(foodObj);
+
             }
             scaleFactor++;
         }
@@ -51,7 +62,7 @@ public class ObjectManager : MonoBehaviour {
 
     public int GetIndexOfObject(GameObject obj)
     {
-        return _foodPool.IndexOf(obj);
+        return _foodObjPool.IndexOf(obj);
     }
 
     public void LoadNewLevelObjects(int currentLoadingLevel)

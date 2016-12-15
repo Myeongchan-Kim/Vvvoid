@@ -41,12 +41,11 @@ public class EffectManager : MonoBehaviour
     public static void SuckingEffectPlay(ParticleSystem ps, Food food)
     {
         float lifeTime = ps.startLifetime;
-        Vector3 moveVec = -food.transform.position;
-
+        
         food.transform.DOMove(new Vector3(0f, 0f, 0f), lifeTime);
 
         ps.transform.position = food.transform.position;
-        ps.transform.DOMoveX(0.1f, 0.0f);
+        ps.transform.DOMove(new Vector3(0.1f, 0.1f, 0.1f), lifeTime);
         ps.Play();
     }
 }

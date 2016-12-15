@@ -9,8 +9,6 @@ public class Food : MonoBehaviour {
     public int levelToReveal;
     public bool isExhausted;
 
-    public FoodManager foodDb;
-
-	void Start () {
-	}
+    //public FoodManager foodDb;
+    
 }
