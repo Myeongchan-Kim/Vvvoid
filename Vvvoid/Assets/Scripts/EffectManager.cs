@@ -10,31 +10,43 @@ public class EffectManager : MonoBehaviour
         DOTween.Init();
     }
 
-    public static void MetorChangingScaleMove(GameObject resource, float deltaScale, GameObject player)
+    public static void MetorChangingScaleMove(GameObject food, float deltaScale, GameObject player)
     {
-        float xOffset = (resource.transform.position.x - player.transform.position.x);
-        float yOffset = (resource.transform.position.y - player.transform.position.y);
-        Vector3 newScale = resource.transform.localScale;
+        float xOffset = (food.transform.position.x - player.transform.position.x);
+        float yOffset = (food.transform.position.y - player.transform.position.y);
+        Vector3 newScale = food.transform.localScale;
 
         newScale *= deltaScale;
         xOffset *= deltaScale;
         yOffset *= deltaScale;
 
-        resource.transform.DOMove(new Vector3(xOffset, yOffset, resource.transform.position.z), duration);
-        resource.transform.DOScale(newScale, duration);
+        food.transform.DOMove(new Vector3(xOffset, yOffset, food.transform.position.z), duration);
+        food.transform.DOScale(newScale, duration);
     }
 
-    public static void MetorUpScale(GameObject resource, GameObject player)
+    public static void MetorUpScale(GameObject meteor, GameObject player)
     {
-        MetorChangingScaleMove(resource, 2.0f, player);
+        MetorChangingScaleMove(meteor, 2.0f, player);
     }
-    public static void MeteorDownScale(GameObject resource, GameObject player)
+    public static void MeteorDownScale(GameObject meteor, GameObject player)
     {
-        MetorChangingScaleMove(resource, duration, player);
+        MetorChangingScaleMove(meteor, duration, player);
     }
 
     public static void ScaleChange(GameObject obj, float targetScale)
     {
         obj.transform.DOScale(targetScale, duration);
+    }
+
+    public static void SuckingEffectPlay(ParticleSystem ps, Food food)
+    {
+        float lifeTime = ps.startLifetime;
+        Vector3 moveVec = -food.transform.position;
+
+        food.transform.DOMove(new Vector3(0f, 0f, 0f), lifeTime);
+
+        ps.transform.position = food.transform.position;
+        ps.transform.DOMoveX(0.1f, 0.0f);
+        ps.Play();
     }
 }

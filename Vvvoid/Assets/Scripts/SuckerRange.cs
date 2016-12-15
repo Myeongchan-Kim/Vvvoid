@@ -20,10 +20,7 @@ public class SuckerRange : MonoBehaviour {
     public double suckableRange { get; private set; }
 
     public List<SuckerUpgrade> upgradedList;
-
-    [SerializeField]
-    private StatManager statManager;
-
+    
     void Start()
     {
         suckableRange = DefulatRangeChecker.transform.position.z;
@@ -42,11 +39,4 @@ public class SuckerRange : MonoBehaviour {
         }
     }
 
-    void Suck(Resource resource)
-    {
-        statManager.AddFuel(resource.containingResource);
-        statManager.AddMass(resource.containingMass);
-        statManager.AddTech(resource.containingTech);
-        
-    }
 }

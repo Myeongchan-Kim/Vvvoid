@@ -39,7 +39,7 @@ public class StatManager : MonoBehaviour {
     public double _maxFuelAmout;
     double _mass;
     double _fuelConsumtionForEachTouch = 10.0;
-    double resource;
+    double food;
 
     public Player player = null;
 
@@ -182,14 +182,4 @@ public class StatManager : MonoBehaviour {
         return _mass;
     } 
 
-    public void AddResource(double resource)
-    {
-        this.resource += resource;
-    }
-
-    public double GetResource()
-    {
-        return resource;
-    }
-    
 }
