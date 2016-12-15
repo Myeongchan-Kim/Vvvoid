@@ -169,14 +169,10 @@ public class ObjectManager : MonoBehaviour {
         var d = Input.GetAxis("Mouse ScrollWheel");
         if (d > 0f)
         {
-
+            Debug.Log("D: " + d);
             foreach (var resource in _resourcePool)
             {
-                resource.transform.localScale *= 2;
-
-                float x = (resource.transform.position.x - _player.transform.position.x) * 2;
-                float y = (resource.transform.position.y - _player.transform.position.y) * 2;
-                resource.transform.position = new Vector3(x, y, resource.transform.position.z);
+                MoveManager.MetorChangingScaleMove(resource, d, _player);
             }
             _player.transform.localScale *= 2;
             _statManager.ZoomInOutByStep(-1);
@@ -185,12 +181,10 @@ public class ObjectManager : MonoBehaviour {
         }
         else if (d < 0f)
         {
+            Debug.Log("D: " + d);
             foreach (var resource in _resourcePool)
             {
-                resource.transform.localScale /= 2;
-                float x = (resource.transform.position.x - _player.transform.position.x) / 2;
-                float y = (resource.transform.position.y - _player.transform.position.y) / 2;
-                resource.transform.position = new Vector3(x, y, resource.transform.position.z);
+                MoveManager.MetorChangingScaleMove(resource, d, _player);
             }
 
             _player.transform.localScale /= 2;
