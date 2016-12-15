@@ -48,6 +48,7 @@ public class StatManager : MonoBehaviour {
     public Text _fuelUI = null;
 
     void Start () {
+        
         _velocity = DEFALT_SPEED;
         distance = 0.0;
         _fuelAmout = _maxFuelAmout * 0.5;
