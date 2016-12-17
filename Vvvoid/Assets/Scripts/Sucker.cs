@@ -8,6 +8,14 @@ public class Sucker : MonoBehaviour {
     [SerializeField]
     private ParticleSystem suckEffector;
 
+    [SerializeField]
+    private SuckerRange _range;
+
+    public double GetRange()
+    {
+        return _range.suckableRange;
+    }
+
     public void Suck(Food food)
     {
         EffectManager.SuckingEffectPlay(suckEffector, food);
