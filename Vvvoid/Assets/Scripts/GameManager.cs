@@ -48,8 +48,8 @@ public class GameManager : MonoBehaviour {
         _elapsedTime += Time.deltaTime;
         if (_elapsedTime > 1 / _statManager.GetScrollSpeed())
         {
-            Debug.Log("On Level " + _statManager.currentScaleStep);
-            Debug.Log("Max Level " + _statManager.maxScaleStep);
+            //Debug.Log("On Level " + _statManager.currentScaleStep);
+            //Debug.Log("Max Level " + _statManager.maxScaleStep);
             _elapsedTime = 0;
             if(_objManager.InactiveFoodIndexes.Count > 0)
             {
@@ -71,15 +71,22 @@ public class GameManager : MonoBehaviour {
                 if (hitInfo.transform.tag == "Food")
                 {
                     GameObject obj = hitInfo.transform.gameObject;
-                    if (obj.activeSelf)
+                    Sucker sucker = _player.GetComponentInChildren<Sucker>();
+                    float range = (float)sucker.GetRange();
+                    float dist = Vector3.Distance(obj.transform.position, transform.position);
+
+                    Debug.Log("Range :" + range);
+                    Debug.Log("Obje Dist : " + dist);
+                    if (obj.activeSelf && sucker.GetRange() > dist)
                     {
-                        Debug.Log("Hit");
+                        Debug.Log("== Suck!");
+
                         Food food = obj.GetComponent<Food>();
                         food.isExhausted = true;
-
-                        Sucker sucker = _player.GetComponentInChildren<Sucker>();
+                        
                         sucker.Suck(food);
-                        //obj.SetActive(false);
+                        obj.SetActive(false);
+
                         _objManager.InactiveFoodIndexes.Enqueue(_objManager.GetIndexOfObject(obj));
                     }
                 }
