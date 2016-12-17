@@ -162,6 +162,7 @@ public class StatManager : MonoBehaviour {
 
     public double AddFuel(double getAmout)
     {
+        Debug.Log("Add Fuel");
         if (getAmout + _fuelAmout < _maxFuelAmout)
             _fuelAmout += getAmout;
         else

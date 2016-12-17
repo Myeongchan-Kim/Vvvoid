@@ -11,7 +11,7 @@ public class Sucker : MonoBehaviour {
     public void Suck(Food food)
     {
         EffectManager.SuckingEffectPlay(suckEffector, food);
-
+        
         statManager.AddFuel(food.containingFuel);
         statManager.AddMass(food.containingMass);
         statManager.AddTech(food.containingTech);
