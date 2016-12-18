@@ -42,11 +42,11 @@ public class EffectManager : MonoBehaviour
     {
         float lifeTime = ps.startLifetime;
 
-        food.transform.DOMove(new Vector3(0f, 0f, 0f), lifeTime);
-
         ps.transform.position = food.transform.position;
         ps.transform.DOMove(new Vector3(0f, 0f, 0f), lifeTime);
 
         ps.Play();
+
+        food.transform.position = new Vector3(-100f, -100f);
     }
 }
