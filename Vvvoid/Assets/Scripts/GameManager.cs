@@ -68,28 +68,7 @@ public class GameManager : MonoBehaviour {
             RaycastHit2D hitInfo = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             if (hitInfo)
             {
-                if (hitInfo.transform.tag == "Food")
-                {
-                    GameObject obj = hitInfo.transform.gameObject;
-                    Sucker sucker = _player.GetComponentInChildren<Sucker>();
-                    float range = (float)sucker.GetRange();
-                    float dist = Vector3.Distance(obj.transform.position, transform.position);
-
-                    Debug.Log("Range :" + range);
-                    Debug.Log("Obje Dist : " + dist);
-                    if (obj.activeSelf && sucker.GetRange() > dist)
-                    {
-                        Debug.Log("== Suck!");
-
-                        Food food = obj.GetComponent<Food>();
-                        food.isExhausted = true;
-                        
-                        sucker.Suck(food);
-                        obj.SetActive(false);
-
-                        _objManager.InactiveFoodIndexes.Enqueue(_objManager.GetIndexOfObject(obj));
-                    }
-                }
+                HitProceedure(hitInfo);
             }
         }
 
@@ -164,4 +143,49 @@ public class GameManager : MonoBehaviour {
         }
     }
 
+    void HitProceedure(RaycastHit2D hitInfo)
+    {
+        if (hitInfo.transform.tag == "Food")
+        {
+            HitFood(hitInfo);
+        }
+        // .. else if ...
+    }
+
+    void HitFood(RaycastHit2D hitInfo)
+    {
+        GameObject obj = hitInfo.transform.gameObject;
+        Sucker sucker = _player.GetComponentInChildren<Sucker>();
+        Food food = obj.GetComponent<Food>();
+
+        float SuckRange = (float)sucker.GetRange();
+        float dist = Vector3.Distance(obj.transform.position, transform.position);
+
+        if (obj.activeSelf && dist < SuckRange)
+        {
+            // suck procedure
+            // fuel+, tech+, mass+
+            SuckFoodProcess(sucker, food);
+
+            _objManager.InactiveFoodIndexes.Enqueue(_objManager.GetIndexOfObject(obj));
+        }
+        else
+        {
+            Observe(obj);
+        }
+    }
+
+    void Observe(GameObject obj)
+    {
+        //... observe proceedure
+
+        // only tech+
+    }
+
+    void SuckFoodProcess(Sucker sucker, Food food)
+    {
+        Debug.Log("== Suck!");
+        food.isExhausted = true;
+        sucker.Suck(food);
+    }
 }
