@@ -17,33 +17,34 @@ public class GameManager : MonoBehaviour {
     
     void Start ()
     {
-        _objManager.MakeObjects();
+        _objManager.MakeObjectPool();
 
         _lastLevel = (int)_statManager.maxScaleStep;
         _startXPosition = _startXTransform.position.x;
         _startYPosition = _startYTransform.position.y;
 
-
-        for (int i = 0; i <= _lastLevel + _preLoadingLevelInterval; i++)
-        {
-            for (int j = 0; j < _prefabMaxLoadCount; j++)
-            {
-                int newObjectIndex = i * _prefabMaxLoadCount + j;
-                GameObject meteor = _objManager.foodPool[newObjectIndex];
-                meteor.SetActive(true);
-                meteor.transform.position = new Vector3(Random.Range(-_startXPosition * 2, _startXPosition * 2), Random.Range(-_startYPosition * 2, _startYPosition * 2), 0);
-                _objManager.ActiveFoodIndexes.Add(newObjectIndex);
-            }
-        }
+        _objManager.MakeNewLevelChange();
+//         for (int i = 0; i <= _lastLevel + _preLoadingLevelInterval; i++)
+//         {
+//             for (int j = 0; j < _prefabMaxLoadCount; j++)
+//             {
+//                 int newObjectIndex = i * _prefabMaxLoadCount + j;
+//                 GameObject meteor = _objManager.FoodPool[newObjectIndex];
+//                 meteor.SetActive(true);
+//                 meteor.transform.position = new Vector3(Random.Range(-_startXPosition * 2, _startXPosition * 2), Random.Range(-_startYPosition * 2, _startYPosition * 2), 0);
+//                 _objManager.ActiveFoodIndexes.Add(newObjectIndex);
+//             }
+//         }
     }
     void Update ()
     {
-        if (_lastLevel < _statManager.maxScaleStep)
-        {
-            _lastLevel = (int)_statManager.maxScaleStep;
-            int currentLoadingLevel = _lastLevel + _preLoadingLevelInterval;
-            _objManager.LoadNewLevelObjects(currentLoadingLevel);
-        }
+        //Loading New Level Objects
+//         if (_lastLevel < _statManager.maxScaleStep)
+//         {
+//             _lastLevel = (int)_statManager.maxScaleStep;
+//             int currentLoadingLevel = _lastLevel + _preLoadingLevelInterval;
+//             _objManager.LoadNewLevelObjects(currentLoadingLevel);
+//         }
 
         _elapsedTime += Time.deltaTime;
         if (_elapsedTime > 1 / _statManager.GetScrollSpeed())
@@ -54,7 +55,7 @@ public class GameManager : MonoBehaviour {
             if(_objManager.InactiveFoodIndexes.Count > 0)
             {
                 int newObjectIndex = _objManager.InactiveFoodIndexes.Dequeue();
-                GameObject meteor = _objManager.foodPool[newObjectIndex];
+                GameObject meteor = _objManager.FoodPool[newObjectIndex];
                 meteor.SetActive(true);
                 meteor.transform.position = new Vector3(Random.Range(_startXPosition, _startXPosition * 2), Random.Range(-_startYPosition * 2, _startYPosition * 2), 0);
                 _objManager.ActiveFoodIndexes.Add(newObjectIndex);
@@ -77,25 +78,25 @@ public class GameManager : MonoBehaviour {
 
     }
 
-    void UpdateActiveObjects()
-    {
-        foreach (var index in _objManager.ActiveFoodIndexes)
-        {
-            GameObject obj = _objManager.foodPool[index];
-            Food food = obj.GetComponent<Food>();
-            if (food.levelToReveal > _statManager.currentScaleStep + 1
-                || food.levelToReveal < _statManager.currentScaleStep - 1)
-            {
-                if (!food.isExhausted)
-                    obj.SetActive(false);
-            }
-            else
-            {
-                if (!food.isExhausted)
-                    obj.SetActive(true);
-            }
-        }
-    }
+//     void UpdateActiveObjects()
+//     {
+//         foreach (var index in _objManager.ActiveFoodIndexes)
+//         {
+//             GameObject obj = _objManager.FoodPool[index];
+//             Food food = obj.GetComponent<Food>();
+//             if (food.levelToReveal > _statManager.currentScaleStep + 1
+//                 || food.levelToReveal < _statManager.currentScaleStep - 1)
+//             {
+//                 if (!food.isExhausted)
+//                     obj.SetActive(false);
+//             }
+//             else
+//             {
+//                 if (!food.isExhausted)
+//                     obj.SetActive(true);
+//             }
+//         }
+//      }
 
     void UpdateObjectsScale()
     {
@@ -103,38 +104,38 @@ public class GameManager : MonoBehaviour {
         if (d > 0f)
         {
             Debug.Log("D: " + d);
-            foreach (var food in _objManager.foodPool)
+            foreach (var food in _objManager.FoodPool)
             {
                 EffectManager.MetorUpScale(food, _player);
             }
 
             EffectManager.ScaleChange(_player, 2.0f);
             _statManager.ZoomInOutByStep(-1);
-            UpdateActiveObjects();
+            _objManager.MakeNewLevelChange();
 
         }
         else if (d < 0f)
         {
-            foreach (var food in _objManager.foodPool)
+            foreach (var food in _objManager.FoodPool)
             {
                 EffectManager.MeteorDownScale(food, _player);
             }
 
             EffectManager.ScaleChange(_player, 0.5f);
             _statManager.ZoomInOutByStep(1);
-            UpdateActiveObjects();
+            _objManager.MakeNewLevelChange();
         }
     }
 
     void UpdateObjectPostition()
     {
-        foreach (var food in _objManager.foodPool)
+        foreach (var food in _objManager.FoodPool)
         {
             if (food.activeSelf && food.transform.position.x < _removingPoint.position.x)
             {
                 // Debug.Log("Metor OUT!");
                 food.SetActive(false);
-                int index = _objManager.foodPool.IndexOf(food);
+                int index = _objManager.FoodPool.IndexOf(food);
                 _objManager.InactiveFoodIndexes.Enqueue(index);
                 _objManager.ActiveFoodIndexes.Remove(index);
             }
