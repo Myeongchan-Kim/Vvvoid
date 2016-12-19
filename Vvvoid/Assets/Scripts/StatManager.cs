@@ -2,7 +2,6 @@
 using UnityEngine.UI;
 using System.Collections;
 using System;
-using Com.Google.Android.Gms.Games;
 
 public class StatManager : MonoBehaviour {
 
