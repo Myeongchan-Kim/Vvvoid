@@ -83,17 +83,19 @@ public class GameManager : MonoBehaviour {
         {
             GameObject obj = _objManager.foodPool[index];
             Food food = obj.GetComponent<Food>();
-            if (food.levelToReveal > _statManager.currentScaleStep + 1
-                || food.levelToReveal < _statManager.currentScaleStep - 1)
-            {
-                if (!food.isExhausted)
-                    obj.SetActive(false);
-            }
-            else
-            {
-                if (!food.isExhausted)
-                    obj.SetActive(true);
-            }
+            //if (food.levelToReveal > _statManager.currentScaleStep - 1
+            //    || food.levelToReveal < _statManager.currentScaleStep + 1)
+            //{
+            //    if (!food.isExhausted)
+            //        obj.SetActive(false);
+            //}
+            //else
+            //{
+            //    if (!food.isExhausted)
+            //        obj.SetActive(true);
+            //}
+            if (food.isExhausted == true)
+                obj.SetActive(false);
         }
     }
 
@@ -176,8 +178,11 @@ public class GameManager : MonoBehaviour {
         Sucker sucker = _playerObj.GetComponentInChildren<Sucker>();
         Food food = obj.GetComponent<Food>();
 
+        
         float SuckRange = (float)sucker.GetRange();
-        float dist = Vector3.Distance(obj.transform.position, transform.position);
+        float dist = Vector3.Distance(hitInfo.transform.position, transform.position);
+        Debug.Log("Hit info: " + hitInfo.transform.position);
+        Debug.Log("Dist: " + dist);
 
         if (obj.activeSelf && dist < SuckRange)
         {

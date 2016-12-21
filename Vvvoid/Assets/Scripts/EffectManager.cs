@@ -41,7 +41,7 @@ public class EffectManager : MonoBehaviour
 
         ps.transform.position = food.transform.position;
         ps.transform.DOMove(new Vector3(0f, 0f, 0f), lifeTime);
-
+        ps.transform.localScale = food.transform.localScale / 5.0f;
         ps.Play();
 
         food.transform.position = new Vector3(-100f, -100f);

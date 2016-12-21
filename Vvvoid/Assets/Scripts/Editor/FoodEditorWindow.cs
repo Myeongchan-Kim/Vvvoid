@@ -112,8 +112,8 @@ public class FoodEditorWindow : EditorWindow
             foodi.baseMassPoint = 0.0;
             foodi.baseTechPoint = foodi.baseFuelPoint * 0.5;
             foodi.sprite = objMan.GetSprite(i % 10);
-            foodi.minScale = i - 2;
-            foodi.maxScale = i + 8;
+            foodi.minScale = i - 10;
+            foodi.maxScale = i + 10;
         }
     }
 }

@@ -48,7 +48,6 @@ public class ObjectManager : MonoBehaviour {
 
                 BoxCollider2D box = foodObj.AddComponent<BoxCollider2D>();
 
-                //foodObj.transform.localScale *= scaleFactor;
                 foodObj.SetActive(false);
 
                 foodObj.name = newFood.name;
