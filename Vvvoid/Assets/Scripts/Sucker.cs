@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System;
 
 public class Sucker : MonoBehaviour {
     [SerializeField]
@@ -13,7 +14,9 @@ public class Sucker : MonoBehaviour {
 
     public double GetRange()
     {
-        return _range.suckableRange;
+        float playerScale = transform.parent.localScale.x;
+        Debug.Log("Current playerScale:" + playerScale);
+        return _range.suckableRange * playerScale;
     }
 
     public void Suck(Food food)

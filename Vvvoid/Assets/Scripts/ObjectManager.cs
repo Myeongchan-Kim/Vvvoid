@@ -16,6 +16,9 @@ public class ObjectManager : MonoBehaviour {
 
     private float _startXPosition;
     private float _startYPosition;
+    [SerializeField]
+    private FoodManager foodManager;
+    
     private List<GameObject> _foodObjPool;
     private Queue<int> _inactiveFoodIndexes;
     private List<int> _activeFoodIndexes;
@@ -31,41 +34,59 @@ public class ObjectManager : MonoBehaviour {
 
     void Start()
     {
-        // there is a bug.
+        // there is a bug that caused by using _foodObjPool before init. So I move this code to OnEnable(). 
     }
 
     public void MakeObjectPool()
     {
-        int scaleFactor = 1;
-        for (int i = 0; i < _prefabs.Length; i++)
+        for (int i = 0; i < foodManager.foodDatas.Length; i++)
         {
             for (int j = 0; j < _prefabMaxLoadCount; j++)
             {
+
                 GameObject foodObj = new GameObject();
 
-                SpriteRenderer renderer = foodObj.AddComponent<SpriteRenderer>();
-                renderer.sprite = _prefabs[i];
-
                 Food newFood = foodObj.AddComponent<Food>();
-                newFood.levelToReveal = i;
-                newFood.isExhausted = false;
+                newFood = foodManager.FillFoodInfoByIndex(i, newFood);
+
+                SpriteRenderer renderer = foodObj.AddComponent<SpriteRenderer>();
+                renderer.sprite = newFood.spirte;
 
                 BoxCollider2D box = foodObj.AddComponent<BoxCollider2D>();
 
-                foodObj.transform.localScale *= scaleFactor;
                 foodObj.SetActive(false);
 
-                foodObj.name = "level " + i + " Food";
+                foodObj.name = newFood.name;
                 foodObj.transform.tag = "Food";
 
                 _foodObjPool.Add(foodObj);
 
             }
-            scaleFactor++;
         }
     }
-    
-    public void MakeNewLevelChange()
+
+    public void PlaceFood(float startXPos, float startYPos, int newObjectIndex)
+    {
+        GameObject foodObj = _foodObjPool[newObjectIndex];
+        foodObj.SetActive(true);
+
+        Food food = foodObj.GetComponent<Food>();
+        food.standardPos = new Vector3(UnityEngine.Random.Range(-startXPos, startXPos), UnityEngine.Random.Range(-startYPos, startYPos), 0);
+
+        ActiveFoodIndexes.Add(newObjectIndex);
+    }
+
+    public Sprite GetSprite(int index)
+    {
+        return _prefabs[index];
+    }
+
+    public int GetIndexOfObject(GameObject obj)
+    {
+        return _foodObjPool.IndexOf(obj);
+    }
+
+    public void LoadNewLevelObjects(int currentLoadingLevel)
     {
         if (_statManager.maxScaleStep == 0)
         {
@@ -124,11 +145,7 @@ public class ObjectManager : MonoBehaviour {
             
         }
     }
-
-    public int GetIndexOfObject(GameObject obj)
-    {
-        return _foodObjPool.IndexOf(obj);
-    }
+    
 
 //     public void LoadNewLevelObjects(int currentLoadingLevel)
 //     {

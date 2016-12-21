@@ -8,6 +8,8 @@ public class Player : MonoBehaviour {
     [SerializeField]
     private ParticleSystem _noFuelEffect;
 
+    public double standardScaleStep = 0.0f;
+
     public void FireRocketEffect()
     {
         _rocketEffect.Play();
