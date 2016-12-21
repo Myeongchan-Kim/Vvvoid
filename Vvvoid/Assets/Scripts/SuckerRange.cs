@@ -25,9 +25,6 @@ public class SuckerRange : MonoBehaviour {
     void Start()
     {
         suckableRange = Math.Abs(DefulatRangeChecker.transform.position.x);
-        //Debug.Log("x :" + Math.Abs(DefulatRangeChecker.transform.position.x));
-        //Debug.Log("y :" + Math.Abs(DefulatRangeChecker.transform.position.y));
-        //Debug.Log("z :" + Math.Abs(DefulatRangeChecker.transform.position.z));
     }
 
     void AddUpgrade(string name, double multiply)

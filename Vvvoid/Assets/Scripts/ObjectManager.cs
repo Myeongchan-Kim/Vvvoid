@@ -10,6 +10,8 @@ public class ObjectManager : MonoBehaviour {
 
     [SerializeField] private StatManager _statManager;
     [SerializeField] private Sprite[] _prefabs;
+    [SerializeField]
+    private FoodManager foodManager;
     
     private List<GameObject> _foodObjPool;
     private Queue<int> _inactiveFoodIndexes;
@@ -26,38 +28,47 @@ public class ObjectManager : MonoBehaviour {
 
     void Start()
     {
-        // there is a bug.
+        // there is a bug that caused by using _foodObjPool before init. So I move this code to OnEnable(). 
     }
 
     public void MakeObjects()
     {
-        int scaleFactor = 1;
-        for (int i = 0; i < _prefabs.Length; i++)
+        for (int i = 0; i < foodManager.foodDatas.Length; i++)
         {
             for (int j = 0; j < _prefabMaxLoadCount; j++)
             {
+
                 GameObject foodObj = new GameObject();
 
-                SpriteRenderer renderer = foodObj.AddComponent<SpriteRenderer>();
-                renderer.sprite = _prefabs[i];
-
                 Food newFood = foodObj.AddComponent<Food>();
-                newFood.levelToReveal = i;
-                newFood.isExhausted = false;
+                newFood = foodManager.FillFoodInfoByIndex(i, newFood);
+
+                SpriteRenderer renderer = foodObj.AddComponent<SpriteRenderer>();
+                renderer.sprite = newFood.spirte;
 
                 BoxCollider2D box = foodObj.AddComponent<BoxCollider2D>();
 
-                foodObj.transform.localScale *= scaleFactor;
+                //foodObj.transform.localScale *= scaleFactor;
                 foodObj.SetActive(false);
 
-                foodObj.name = "level " + i + " Food";
+                foodObj.name = newFood.name;
                 foodObj.transform.tag = "Food";
 
                 _foodObjPool.Add(foodObj);
 
             }
-            scaleFactor++;
         }
+    }
+
+    public void PlaceFood(float startXPos, float startYPos, int newObjectIndex)
+    {
+        GameObject foodObj = foodPool[newObjectIndex];
+        foodObj.SetActive(true);
+
+        Food food = foodObj.GetComponent<Food>();
+        food.standardPos = new Vector3(UnityEngine.Random.Range(-startXPos, startXPos), UnityEngine.Random.Range(-startYPos, startYPos), 0);
+
+        ActiveFoodIndexes.Add(newObjectIndex);
     }
 
     public Sprite GetSprite(int index)

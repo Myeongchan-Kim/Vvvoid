@@ -13,7 +13,7 @@ public class FoodEditor : Editor
         window = EditorWindow.GetWindow<FoodEditorWindow>("Food Editor");
         window.title  = "Food Editor";
         window.position = new Rect(20, 40, 500, 700);
-        window.foodInfoList = foodmanager.FoodDatas;
+        window.foodInfoList = foodmanager.foodDatas;
         window.multiplyConstant = foodmanager.multiplyConstant;
         window.objMan = foodmanager.objman.GetComponent<ObjectManager>();
     }

@@ -14,6 +14,7 @@ public class FoodInfo
     public int minScale = 0;
 
     public Sprite sprite;
+
 }
 
 [System.Serializable]
@@ -27,8 +28,24 @@ public class StageMultiply
 
 public class FoodManager : MonoBehaviour {
 
-    public FoodInfo[] FoodDatas;
+    public FoodInfo[] foodDatas;
     public StageMultiply[] multiplyConstant;
 
-    public GameObject objman;   
+    public GameObject objman;
+
+    public Food FillFoodInfoByIndex(int index, Food newFood)
+    {
+        FoodInfo foodi = foodDatas[index];
+
+        newFood.name = foodi.foodName;
+        newFood.levelToReveal = foodi.minScale;
+        newFood.standardScaleStep = ( foodi.minScale + 1);
+        newFood.isExhausted = false;
+        newFood.containingFuel = foodi.baseFuelPoint;
+        newFood.containingTech = foodi.baseTechPoint;
+        newFood.containingMass = foodi.baseMassPoint;
+        newFood.spirte = foodi.sprite;
+
+        return newFood;
+    }
 }
