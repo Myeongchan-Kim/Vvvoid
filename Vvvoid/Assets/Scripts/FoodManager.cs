@@ -13,7 +13,7 @@ public class FoodInfo
     public int maxScale = 100;
     public int minScale = 0;
 
-    public GameObject sprite;
+    public Sprite sprite;
 }
 
 [System.Serializable]
@@ -29,5 +29,6 @@ public class FoodManager : MonoBehaviour {
 
     public FoodInfo[] FoodDatas;
     public StageMultiply[] multiplyConstant;
-    
+
+    public GameObject objman;   
 }

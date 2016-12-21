@@ -60,6 +60,11 @@ public class ObjectManager : MonoBehaviour {
         }
     }
 
+    public Sprite GetSprite(int index)
+    {
+        return _prefabs[index];
+    }
+
     public int GetIndexOfObject(GameObject obj)
     {
         return _foodObjPool.IndexOf(obj);

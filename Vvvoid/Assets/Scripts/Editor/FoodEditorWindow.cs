@@ -12,7 +12,9 @@ public class FoodEditorWindow : EditorWindow
 
     public StageMultiply[] multiplyConstant;
     public FoodInfo[] foodInfoList;
-   
+
+    public ObjectManager objMan;
+
     void OnGUI()
     {
         ShowInitButton();
@@ -109,6 +111,7 @@ public class FoodEditorWindow : EditorWindow
             foodi.baseFuelPoint = Math.Pow(2, i);
             foodi.baseMassPoint = 0.0;
             foodi.baseTechPoint = foodi.baseFuelPoint * 0.5;
+            foodi.sprite = objMan.GetSprite(i % 10);
         }
     }
 }
