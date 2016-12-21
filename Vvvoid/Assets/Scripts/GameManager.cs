@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 
 public class GameManager : MonoBehaviour {
     [SerializeField] private Transform _startXTransform;
@@ -6,7 +7,7 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private StatManager _statManager;
     [SerializeField] private ObjectManager _objManager;
     [SerializeField] private Transform _removingPoint;
-    [SerializeField] private GameObject _player;
+    [SerializeField] private GameObject _playerObj;
 
     private float _startXPosition;
     private float _startYPosition;
@@ -29,13 +30,14 @@ public class GameManager : MonoBehaviour {
             for (int j = 0; j < _prefabMaxLoadCount; j++)
             {
                 int newObjectIndex = i * _prefabMaxLoadCount + j;
-                GameObject meteor = _objManager.foodPool[newObjectIndex];
-                meteor.SetActive(true);
-                meteor.transform.position = new Vector3(Random.Range(-_startXPosition * 2, _startXPosition * 2), Random.Range(-_startYPosition * 2, _startYPosition * 2), 0);
-                _objManager.ActiveFoodIndexes.Add(newObjectIndex);
+                _objManager.PlaceFood(_startXPosition, _startYPosition, newObjectIndex);
             }
         }
+
+        double currentScale = _statManager.currentScaleStep;
+        ApplyCurrentScale(currentScale, currentScale);
     }
+
     void Update ()
     {
         if (_lastLevel < _statManager.maxScaleStep)
@@ -54,10 +56,8 @@ public class GameManager : MonoBehaviour {
             if(_objManager.InactiveFoodIndexes.Count > 0)
             {
                 int newObjectIndex = _objManager.InactiveFoodIndexes.Dequeue();
-                GameObject meteor = _objManager.foodPool[newObjectIndex];
-                meteor.SetActive(true);
-                meteor.transform.position = new Vector3(Random.Range(_startXPosition, _startXPosition * 2), Random.Range(-_startYPosition * 2, _startYPosition * 2), 0);
-                _objManager.ActiveFoodIndexes.Add(newObjectIndex);
+                
+                _objManager.PlaceFood(_startXPosition, _startYPosition, newObjectIndex);
             }
         }
 
@@ -83,45 +83,63 @@ public class GameManager : MonoBehaviour {
         {
             GameObject obj = _objManager.foodPool[index];
             Food food = obj.GetComponent<Food>();
-            if (food.levelToReveal > _statManager.currentScaleStep + 1
-                || food.levelToReveal < _statManager.currentScaleStep - 1)
-            {
-                if (!food.isExhausted)
-                    obj.SetActive(false);
-            }
-            else
-            {
-                if (!food.isExhausted)
-                    obj.SetActive(true);
-            }
+            //if (food.levelToReveal > _statManager.currentScaleStep - 1
+            //    || food.levelToReveal < _statManager.currentScaleStep + 1)
+            //{
+            //    if (!food.isExhausted)
+            //        obj.SetActive(false);
+            //}
+            //else
+            //{
+            //    if (!food.isExhausted)
+            //        obj.SetActive(true);
+            //}
+            if (food.isExhausted == true)
+                obj.SetActive(false);
+        }
+    }
+
+    void ApplyCurrentScale(double oldScale, double newScaleStep)
+    {
+        Player player = _playerObj.GetComponent<Player>();
+
+        //every object has its own scalestep. 
+        double standardScaleStep = player.standardScaleStep;
+        float newLocalScaleOfPlayer = (float)Math.Pow(2, standardScaleStep - newScaleStep);
+        
+        // Debug.Log("===== Oldscale:" + oldScale + " NewScale:" + newScaleStep + "standard:" + standardScaleStep);
+        EffectManager.ScaleChange(_playerObj, newLocalScaleOfPlayer);
+
+        foreach (var food in _objManager.foodPool)
+        {
+            Food f = food.GetComponent<Food>();
+
+            // Change scale of Food
+            float newLocalScaleOfFood = (float)Math.Pow(2, f.standardScaleStep - newScaleStep);
+            EffectManager.ScaleChange(food, newLocalScaleOfFood);
+
+            // Change position of Food
+            float newPostionScaleOfFood = (float)Math.Pow(2, (f.standardScaleStep - newScaleStep));
+            Vector3 newPos = f.standardPos * newPostionScaleOfFood;
+            EffectManager.ChangeFoodPositon(food, _playerObj, newPos);
         }
     }
 
     void UpdateObjectsScale()
     {
         var d = Input.GetAxis("Mouse ScrollWheel");
+        double currentScale = _statManager.currentScaleStep;
         if (d > 0f)
         {
-            Debug.Log("D: " + d);
-            foreach (var food in _objManager.foodPool)
-            {
-                EffectManager.MetorUpScale(food, _player);
-            }
-
-            EffectManager.ScaleChange(_player, 2.0f);
-            _statManager.ZoomInOutByStep(-1);
+            double newScaleStep = _statManager.ZoomInOutByStep(1);
+            ApplyCurrentScale(currentScale, newScaleStep);
             UpdateActiveObjects();
 
         }
         else if (d < 0f)
         {
-            foreach (var food in _objManager.foodPool)
-            {
-                EffectManager.MeteorDownScale(food, _player);
-            }
-
-            EffectManager.ScaleChange(_player, 0.5f);
-            _statManager.ZoomInOutByStep(1);
+            double newScaleStep = _statManager.ZoomInOutByStep(-1);
+            ApplyCurrentScale(currentScale, newScaleStep);
             UpdateActiveObjects();
         }
     }
@@ -140,6 +158,8 @@ public class GameManager : MonoBehaviour {
             }
             float scrollSpeed = _statManager.GetScrollSpeed();
             food.transform.position -= new Vector3(scrollSpeed, 0, 0) * Time.deltaTime;
+            Food f = food.GetComponent<Food>();
+            f.standardPos -= new Vector3(scrollSpeed / (float)Math.Pow(2, f.standardScaleStep - _statManager.currentScaleStep), 0, 0) * Time.deltaTime;
         }
     }
 
@@ -155,11 +175,14 @@ public class GameManager : MonoBehaviour {
     void HitFood(RaycastHit2D hitInfo)
     {
         GameObject obj = hitInfo.transform.gameObject;
-        Sucker sucker = _player.GetComponentInChildren<Sucker>();
+        Sucker sucker = _playerObj.GetComponentInChildren<Sucker>();
         Food food = obj.GetComponent<Food>();
 
+        
         float SuckRange = (float)sucker.GetRange();
-        float dist = Vector3.Distance(obj.transform.position, transform.position);
+        float dist = Vector3.Distance(hitInfo.point, transform.position);
+        Debug.Log("Hit info: " + hitInfo.point);
+        Debug.Log("Dist: " + dist);
 
         if (obj.activeSelf && dist < SuckRange)
         {

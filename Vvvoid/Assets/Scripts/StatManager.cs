@@ -31,8 +31,9 @@ public class StatManager : MonoBehaviour {
     }
 
     double _techPoint = 0.0f;
-    double _currentScaleStep = 0.0f;
-    double _maxScaleStep = 0.0f;
+    double _currentScaleStep = 1.0f;
+    double _maxScaleStep = 10.0f;
+    double _minScaleStep = 0.0f;
     double _velocity;
     public double distance { get; private set; }
     double _fuelAmout;
@@ -121,12 +122,18 @@ public class StatManager : MonoBehaviour {
         _currentScaleStep = targetStep;
     }
 
-    public void ZoomInOutByStep(double step) //times == 10 means 10 times. times == 0.1 means 10% zoom out
+    public double ZoomInOutByStep(double step) //times == 10 means 10 times. times == 0.1 means 10% zoom out
     {
         _currentScaleStep += step;
-        if (maxScaleStep < _currentScaleStep)
-            _maxScaleStep = _currentScaleStep;
+        if (_currentScaleStep > _maxScaleStep)
+            _currentScaleStep = _maxScaleStep;
+        if (_currentScaleStep < _minScaleStep)
+            _currentScaleStep = _minScaleStep;
 
+        Debug.Log("Scroll Speed : " + GetScrollSpeed());
+        Debug.Log("Current Step : " + _currentScaleStep);
+
+        return _currentScaleStep;
     }
 
     public void ZoomInOutRealScale(double times)
