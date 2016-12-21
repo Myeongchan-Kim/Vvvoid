@@ -180,8 +180,8 @@ public class GameManager : MonoBehaviour {
 
         
         float SuckRange = (float)sucker.GetRange();
-        float dist = Vector3.Distance(hitInfo.transform.position, transform.position);
-        Debug.Log("Hit info: " + hitInfo.transform.position);
+        float dist = Vector3.Distance(hitInfo.point, transform.position);
+        Debug.Log("Hit info: " + hitInfo.point);
         Debug.Log("Dist: " + dist);
 
         if (obj.activeSelf && dist < SuckRange)
