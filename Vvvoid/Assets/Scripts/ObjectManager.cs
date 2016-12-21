@@ -64,6 +64,7 @@ public class ObjectManager : MonoBehaviour {
 
                 GameObject foodObj = new GameObject();
 
+                Instantiate<GameObject>(foodObj);
                 Food newFood = foodObj.AddComponent<Food>();
                 newFood = foodManager.FillFoodInfoByIndex(i, newFood);
 
@@ -101,8 +102,8 @@ public class ObjectManager : MonoBehaviour {
 
         Food food = foodObj.GetComponent<Food>();
         food.standardPos = new Vector3(x, y, 0);
-
-        ActiveFoodIndexes.Add(newObjectIndex);
+        foodObj.transform.position = new Vector3(x, y, 0);
+        _activeFoodIndexes.Add(newObjectIndex);
     }
 
     public Sprite GetSprite(int index)

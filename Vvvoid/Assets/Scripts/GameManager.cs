@@ -14,10 +14,7 @@ public class GameManager : MonoBehaviour {
     void Start ()
     {
         _objManager.MakeObjectPool();
-
         _currentLevel = (int)_statManager.MaxScaleStep;
-
-
         _objManager.LoadNewLevelObjects(_currentLevel);
 
         double currentScale = _statManager.CurrentScaleStep;
@@ -30,7 +27,6 @@ public class GameManager : MonoBehaviour {
         if (_currentLevel < _statManager.MaxScaleStep)
         {
             _currentLevel = (int)_statManager.MaxScaleStep;
-
             _objManager.LoadNewLevelObjects(_currentLevel);
         }
 
@@ -43,7 +39,9 @@ public class GameManager : MonoBehaviour {
         }
 
         CheckExaustedFoods();
+
         UpdateObjectsScale();
+
         UpdateObjectPostition();
 
     }
@@ -154,16 +152,17 @@ public class GameManager : MonoBehaviour {
 
     void UpdateObjectPostition()
     {
-        foreach (var food in _objManager.FoodPool)
+        foreach (var index in _objManager.ActiveFoodIndexes)
         {
-            if (food.activeSelf && food.transform.position.x < _removingPoint.position.x)
+            GameObject food = _objManager.FoodPool[index];
+            if (food.transform.position.x < _removingPoint.position.x)
             {
                 // Debug.Log("Metor OUT!");
                 food.SetActive(false);
-                int index = _objManager.FoodPool.IndexOf(food);
                 _objManager.InactiveFoodIndexQueue.Enqueue(index);
                 _objManager.ActiveFoodIndexes.Remove(index);
             }
+
             float scrollSpeed = _statManager.GetScrollSpeed();
             food.transform.position -= new Vector3(scrollSpeed, 0, 0) * Time.deltaTime;
             Food f = food.GetComponent<Food>();
