@@ -7,25 +7,32 @@ public class StatManager : MonoBehaviour {
 
     public const double DEFALT_SPEED = 1.0;
     public const double DEFALT_MASS = 10;
-    public double currentScaleStep
+    public double CurrentScaleStep
     {
         get
         {
             return _currentScaleStep;
         }
     }
-    public double maxScaleStep
+    public double MaxScaleStep
     {
         get
         {
             return _maxScaleStep;
         }
     }
-    public double currentTechPoint
+    public double CurrentTechPoint
     {
         get
         {
             return _techPoint;
+        }
+    }
+    public double Distance
+    {
+        get
+        {
+            return _distance;
         }
     }
 
@@ -34,7 +41,7 @@ public class StatManager : MonoBehaviour {
     double _maxScaleStep = 10.0f;
     double _minScaleStep = 0.0f;
     double _velocity;
-    public double distance { get; private set; }
+    private double _distance;
     double _fuelAmout;
     public double _maxFuelAmout;
     double _mass;
@@ -50,11 +57,11 @@ public class StatManager : MonoBehaviour {
     void Start () {
         
         _velocity = DEFALT_SPEED;
-        distance = 0.0;
+        _distance = 0.0;
         _fuelAmout = _maxFuelAmout * 0.5;
         _mass = DEFALT_MASS;
 
-        Social.ReportScore((long)distance, "CgkI5YeLpasSEAIQAg", (bool sucess) => { if (sucess) Debug.Log("Score Update Success"); else Debug.Log("Scored Update Fail"); });
+        Social.ReportScore((long)_distance, "CgkI5YeLpasSEAIQAg", (bool sucess) => { if (sucess) Debug.Log("Score Update Success"); else Debug.Log("Scored Update Fail"); });
     }
 
     string SetText(ref Text target, ref double targetValue, String formatStr)
@@ -69,12 +76,12 @@ public class StatManager : MonoBehaviour {
 
     void Update () {
 
-        distance += (double)Time.deltaTime * _velocity;
+        _distance += (double)Time.deltaTime * _velocity;
 
         System.Text.StringBuilder sb = new System.Text.StringBuilder();
         sb.Length = 0;
 
-        sb.AppendFormat("Dist : {0:N3} m", distance);
+        sb.AppendFormat("Dist : {0:N3} m", _distance);
         _distanceUI.text = sb.ToString();
         sb.Length = 0;
 
