@@ -44,7 +44,7 @@ public class FoodManager : MonoBehaviour {
         newFood.containingFuel = foodi.baseFuelPoint;
         newFood.containingTech = foodi.baseTechPoint;
         newFood.containingMass = foodi.baseMassPoint;
-        newFood.spirte = foodi.sprite;
+        newFood.sprite = foodi.sprite;
 
         return newFood;
     }

@@ -68,7 +68,7 @@ public class ObjectManager : MonoBehaviour {
                 newFood = foodManager.FillFoodInfoByIndex(i, newFood);
 
                 SpriteRenderer renderer = foodObj.AddComponent<SpriteRenderer>();
-                renderer.sprite = newFood.spirte;
+                renderer.sprite = newFood.sprite;
 
                 BoxCollider2D box = foodObj.AddComponent<BoxCollider2D>();
 
