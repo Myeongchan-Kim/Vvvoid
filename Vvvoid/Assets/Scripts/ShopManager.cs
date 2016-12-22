@@ -1,28 +1,36 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class ShopManager : MonoBehaviour {
 
-	void Start () {
-	
-	}
-	
-	void Update () {
-	
-	}
+    //public GameObject PlayerShopScrollview;
+    //public GameObject PilotShopScrollview;
+    //public GameObject WarmHolerShopScrollview;
+    public GameObject shops;
 
-    public void ExtendPlayerShopMenu()
+    void Start()
     {
-        Debug.Log("======== player shop");
+        Transform ts = shops.transform;
+
+        foreach(Transform t in ts)
+        {
+            Transform scrollview = t.GetChild(1);
+            scrollview.gameObject.SetActive(false);
+        }
+    }
+    
+    public void ToggleMenu(GameObject obj)
+    {
+        Debug.Log("======== Toggle SHop");
+        toggleActive(obj);
     }
 
-    public void ExtendPilotShopMenu()
+    void toggleActive(GameObject obj)
     {
-        Debug.Log("======== pilot shop");
-    }
-
-    public void ExtendWormholeMenu()
-    {
-        Debug.Log("======== warm hole");
+        if (obj.activeSelf)
+            obj.SetActive(false);
+        else
+            obj.SetActive(true);
     }
 }
