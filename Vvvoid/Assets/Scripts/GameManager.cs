@@ -119,17 +119,6 @@ public class GameManager : MonoBehaviour {
         {
             GameObject obj = _objManager.FoodPool[index];
             Food food = obj.GetComponent<Food>();
-            //             if (food.levelToReveal > _statManager.CurrentScaleStep - 1
-            //                || food.levelToReveal < _statManager.CurrentScaleStep + 1)
-            //             {
-            //                 if (!food.isExhausted)
-            //                     obj.SetActive(false);
-            //             }
-            //             else
-            //             {
-            //                 if (!food.isExhausted)
-            //                     obj.SetActive(true);
-            //             }
             if (!food.isExhausted)
                 obj.SetActive(true);
         }
