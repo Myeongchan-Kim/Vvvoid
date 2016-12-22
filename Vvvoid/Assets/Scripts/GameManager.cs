@@ -16,10 +16,11 @@ public class GameManager : MonoBehaviour {
     {
         _objManager.MakeObjectPool();
         _currentMaxLevel = (int)_statManager.MaxScaleStep;
-        _objManager.LoadNewLevelObjects(_currentMaxLevel);
+        _objManager.LoadInitialLevel(_currentMaxLevel);
 
         double currentScale = _statManager.CurrentScaleStep;
         ApplyCurrentScale(currentScale, currentScale);
+        UpdateActiveObjects();
     }
 
     void Update ()
@@ -118,17 +119,19 @@ public class GameManager : MonoBehaviour {
         {
             GameObject obj = _objManager.FoodPool[index];
             Food food = obj.GetComponent<Food>();
-            if (food.levelToReveal > _statManager.CurrentScaleStep - 1
-               || food.levelToReveal < _statManager.CurrentScaleStep + 1)
-            {
-                if (!food.isExhausted)
-                    obj.SetActive(false);
-            }
-            else
-            {
-                if (!food.isExhausted)
-                    obj.SetActive(true);
-            }
+            //             if (food.levelToReveal > _statManager.CurrentScaleStep - 1
+            //                || food.levelToReveal < _statManager.CurrentScaleStep + 1)
+            //             {
+            //                 if (!food.isExhausted)
+            //                     obj.SetActive(false);
+            //             }
+            //             else
+            //             {
+            //                 if (!food.isExhausted)
+            //                     obj.SetActive(true);
+            //             }
+            if (!food.isExhausted)
+                obj.SetActive(true);
         }
     }
 

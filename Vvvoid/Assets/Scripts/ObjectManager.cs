@@ -116,45 +116,40 @@ public class ObjectManager : MonoBehaviour {
         return _foodObjPool.IndexOf(obj);
     }
 
-    public void LoadNewLevelObjects(int loadingLevel)
+    public void LoadInitialLevel(int initialLevel)
     {
-        if (loadingLevel == 0)
+        for (int i = 0; i <= _preLoadingLevelInterval + initialLevel; i++)
         {
-            for (int i = 0; i <= _preLoadingLevelInterval; i++)
+            for (int j = 0; j < _loadingNumOfOnePrefab; j++)
             {
-                for (int j = 0; j < _loadingNumOfOnePrefab; j++)
-                {
 
-                    int newObjectIndex = i * _loadingNumOfOnePrefab + j;
+                int newObjectIndex = i * _loadingNumOfOnePrefab + j;
 
-                    float x = Random.Range(-_xMax * 2, _xMax * 2);
-                    float y = Random.Range(-_yMax * 2, _yMax * 2);
-                    
-                    PlaceFood(x, y, newObjectIndex);
-                }
+                float x = Random.Range(-_xMax * 2, _xMax * 2);
+                float y = Random.Range(-_yMax * 2, _yMax * 2);
+
+                PlaceFood(x, y, newObjectIndex);
             }
-        }
-        else
-        {
-            int preLoadingLevel = loadingLevel + _preLoadingLevelInterval;
-            if (preLoadingLevel < _prefabs.Length)
-            {
-                for (int i = 0; i <= _loadingNumOfOnePrefab; i++)
-                { 
-                    int newObjectIndex = preLoadingLevel * _loadingNumOfOnePrefab + i;
-                    
-                    Vector3 random;
-                    do
-                    {
-                        random = new Vector3(Random.Range(-_xMax * 2, _xMax * 2), Random.Range(-_yMax * 2, _yMax * 2), 0);
-                    } while (_visibleArea.bounds.Contains(random));
-                    
-                    PlaceFood(random.x, random.y, newObjectIndex);
-                }
-            }
-
-            
         }
     }
-    
+
+    public void LoadNewLevelObjects(int loadingLevel)
+    {
+        int preLoadingLevel = loadingLevel + _preLoadingLevelInterval;
+        if (preLoadingLevel < _prefabs.Length)
+        {
+            for (int i = 0; i < _loadingNumOfOnePrefab; i++)
+            {
+                int newObjectIndex = preLoadingLevel * _loadingNumOfOnePrefab + i;
+
+                Vector3 random;
+                do
+                {
+                    random = new Vector3(Random.Range(-_xMax * 2, _xMax * 2), Random.Range(-_yMax * 2, _yMax * 2), 0);
+                } while (_visibleArea.bounds.Contains(random));
+
+                PlaceFood(random.x, random.y, newObjectIndex);
+            }
+        }
+    }
 }
