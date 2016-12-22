@@ -7,21 +7,14 @@ public class ObjectManager : MonoBehaviour {
     public List<GameObject> FoodPool { get { return _foodObjPool; } }
     public Queue<int> InactiveFoodIndexQueue { get { return _inactiveFoodIndexQueue; } }
     public List<int> ActiveFoodIndexes { get { return _activeFoodIndexes; } }
-    // 
-    //     [SerializeField] private Transform _startXTransform;
-    //     [SerializeField] private Transform _startYTransform;
-    [SerializeField]
-    private Transform _xMaxTransform;
-    [SerializeField]
-    private Transform _yMaxTransform;
-    [SerializeField] private BoxCollider _visibleArea;
+
+
+    [SerializeField] private Transform _xMaxTransform;
+    [SerializeField] private Transform _yMaxTransform;
+    [SerializeField] private BoxCollider _defaultBox;
     [SerializeField] private StatManager _statManager;
     [SerializeField] private Sprite[] _prefabs;
-// 
-//     private float _startXPosition;
-//     private float _startYPosition;
-    [SerializeField]
-    private FoodManager foodManager;
+    [SerializeField] private FoodManager foodManager;
     
     private List<GameObject> _foodObjPool;
     private Queue<int> _inactiveFoodIndexQueue;
@@ -87,7 +80,7 @@ public class ObjectManager : MonoBehaviour {
         if (_inactiveFoodIndexQueue.Count > 0)
         {
             int newObjectIndex = _inactiveFoodIndexQueue.Dequeue();
-            float x = UnityEngine.Random.Range(-_xMax, _xMax);
+            float x = UnityEngine.Random.Range(_xMax, 2 * _xMax);
             float y = UnityEngine.Random.Range(-_yMax, _yMax);
             PlaceFood(x, y, newObjectIndex);
         }
@@ -103,7 +96,6 @@ public class ObjectManager : MonoBehaviour {
         foodObj.transform.position = new Vector3(x, y, 0);
 
         _activeFoodIndexes.Add(newObjectIndex);
-        
     }
 
     public Sprite GetSprite(int index)
@@ -118,18 +110,25 @@ public class ObjectManager : MonoBehaviour {
 
     public void LoadInitialLevel(int initialLevel)
     {
+        Vector3 random;
+        float currentXMax = _xMax * Mathf.Pow(2, -initialLevel);
+        float currentYMax = _yMax * Mathf.Pow(2, -initialLevel);
         for (int i = 0; i <= _preLoadingLevelInterval + initialLevel; i++)
         {
             for (int j = 0; j < _loadingNumOfOnePrefab; j++)
             {
-
                 int newObjectIndex = i * _loadingNumOfOnePrefab + j;
+                
+                do
+                {
+                    random = new Vector3(Random.Range(-currentXMax, currentXMax), Random.Range(-currentYMax, currentYMax), 0);
+                } while (_defaultBox.bounds.Contains(random));
 
-                float x = Random.Range(-_xMax * 2, _xMax * 2);
-                float y = Random.Range(-_yMax * 2, _yMax * 2);
-
-                PlaceFood(x, y, newObjectIndex);
+                PlaceFood(random.x, random.y, newObjectIndex);
             }
+            currentXMax *= 2;
+            currentYMax *= 2;
+            _defaultBox.transform.localScale *= 2;
         }
     }
 
@@ -143,13 +142,15 @@ public class ObjectManager : MonoBehaviour {
                 int newObjectIndex = preLoadingLevel * _loadingNumOfOnePrefab + i;
 
                 Vector3 random;
+
                 do
                 {
                     random = new Vector3(Random.Range(-_xMax * 2, _xMax * 2), Random.Range(-_yMax * 2, _yMax * 2), 0);
-                } while (_visibleArea.bounds.Contains(random));
+                } while (_defaultBox.bounds.Contains(random));
 
                 PlaceFood(random.x, random.y, newObjectIndex);
             }
+            _defaultBox.transform.localScale *= 2;
         }
     }
 }
