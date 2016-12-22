@@ -12,6 +12,7 @@ public class FoodInfo
     public double baseTechPoint = 0.0;
     public int maxScale = 100;
     public int minScale = 0;
+    public int standardScale = 1;
 
     public Sprite sprite;
 
@@ -39,7 +40,7 @@ public class FoodManager : MonoBehaviour {
 
         newFood.name = foodi.foodName;
         newFood.levelToReveal = foodi.minScale;
-        newFood.standardScaleStep = ( foodi.minScale + 5);
+        newFood.standardScaleStep = foodi.standardScale;
         newFood.isExhausted = false;
         newFood.containingFuel = foodi.baseFuelPoint;
         newFood.containingTech = foodi.baseTechPoint;
