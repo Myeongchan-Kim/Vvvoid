@@ -34,11 +34,12 @@ public class FoodEditorWindow : EditorWindow
     {
         
     }
+
     void ShowFoodListOnWindow()
     {
         
         GUILayout.BeginHorizontal();
-        GUILayout.Label("Realational stage");
+        GUILayout.Label("Realational mul:");
         for (int i = 0; i < multiplyConstant.GetLength(0); i++)
         {
             GUILayout.Label("" + i + " level");
@@ -75,6 +76,9 @@ public class FoodEditorWindow : EditorWindow
         
         GUILayout.BeginHorizontal();
         GUILayout.Label("Food Name");
+        GUILayout.Label("Standard");
+        GUILayout.Label("Min stage");
+        GUILayout.Label("Max stage");
         GUILayout.Label("Base Fuel");
         GUILayout.Label("Base Mass");
         GUILayout.Label("Base Tech");
@@ -88,6 +92,10 @@ public class FoodEditorWindow : EditorWindow
 
             GUILayout.Label(foodi.foodName);
             GUILayout.Space(10);
+
+            foodi.standardScale = EditorGUILayout.IntField(foodi.standardScale);
+            foodi.minScale = EditorGUILayout.IntField(foodi.minScale);
+            foodi.maxScale = EditorGUILayout.IntField(foodi.maxScale);
             foodi.baseFuelPoint = EditorGUILayout.DoubleField(foodi.baseFuelPoint);
             foodi.baseMassPoint = EditorGUILayout.DoubleField(foodi.baseMassPoint);
             foodi.baseTechPoint = EditorGUILayout.DoubleField(foodi.baseTechPoint);
@@ -114,6 +122,7 @@ public class FoodEditorWindow : EditorWindow
             foodi.sprite = objMan.GetSprite(i % 10);
             foodi.minScale = i - 2;
             foodi.maxScale = i + 8;
+            foodi.standardScale = i + 3;
         }
     }
 }
