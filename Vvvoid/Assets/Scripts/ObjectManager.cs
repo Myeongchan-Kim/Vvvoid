@@ -4,26 +4,50 @@ using System.Collections.Generic;
 
 public class ObjectManager : MonoBehaviour {
 
-    public List<GameObject> foodPool { get { return _foodObjPool; } }
-    public Queue<int> InactiveFoodIndexes { get { return _inactiveFoodIndexes; } }
+    public List<GameObject> FoodPool { get { return _foodObjPool; } }
+    public Queue<int> InactiveFoodIndexQueue { get { return _inactiveFoodIndexQueue; } }
     public List<int> ActiveFoodIndexes { get { return _activeFoodIndexes; } }
-
+    // 
+    //     [SerializeField] private Transform _startXTransform;
+    //     [SerializeField] private Transform _startYTransform;
+    [SerializeField]
+    private Transform _xMaxTransform;
+    [SerializeField]
+    private Transform _yMaxTransform;
+    [SerializeField] private BoxCollider _visibleArea;
     [SerializeField] private StatManager _statManager;
     [SerializeField] private Sprite[] _prefabs;
+// 
+//     private float _startXPosition;
+//     private float _startYPosition;
     [SerializeField]
     private FoodManager foodManager;
     
     private List<GameObject> _foodObjPool;
-    private Queue<int> _inactiveFoodIndexes;
+    private Queue<int> _inactiveFoodIndexQueue;
     private List<int> _activeFoodIndexes;
-    private int _prefabMaxLoadCount = 20;
-    private int _preLoadingLevelInterval = 1;
+    private int _loadingNumOfOnePrefab = 20;
+    private int _preLoadingLevelInterval;
+    private float _xMax;
+    private float _yMax;
+
+    public void SetloadingNumOfOnePrefab(int loadCount)
+    {
+        _loadingNumOfOnePrefab = loadCount;
+    }
+
+    public void SetPreLoadingLevelInterval(int interval)
+    {
+        _preLoadingLevelInterval = interval;
+    }
 
     void OnEnable()
     {
         _foodObjPool = new List<GameObject>();
-        _inactiveFoodIndexes = new Queue<int>();
+        _inactiveFoodIndexQueue = new Queue<int>();
         _activeFoodIndexes = new List<int>();
+        _xMax = _xMaxTransform.position.x;
+        _yMax = _yMaxTransform.position.y;
     }
 
     void Start()
@@ -31,15 +55,16 @@ public class ObjectManager : MonoBehaviour {
         // there is a bug that caused by using _foodObjPool before init. So I move this code to OnEnable(). 
     }
 
-    public void MakeObjects()
+    public void MakeObjectPool()
     {
         for (int i = 0; i < foodManager.foodDatas.Length; i++)
         {
-            for (int j = 0; j < _prefabMaxLoadCount; j++)
+            for (int j = 0; j < _loadingNumOfOnePrefab; j++)
             {
 
                 GameObject foodObj = new GameObject();
 
+                Instantiate<GameObject>(foodObj);
                 Food newFood = foodObj.AddComponent<Food>();
                 newFood = foodManager.FillFoodInfoByIndex(i, newFood);
 
@@ -59,15 +84,26 @@ public class ObjectManager : MonoBehaviour {
         }
     }
 
-    public void PlaceFood(float startXPos, float startYPos, int newObjectIndex)
+    public void SpawnNewFood()
     {
-        GameObject foodObj = foodPool[newObjectIndex];
+        if (_inactiveFoodIndexQueue.Count > 0)
+        {
+            int newObjectIndex = _inactiveFoodIndexQueue.Dequeue();
+            float x = UnityEngine.Random.Range(-_xMax, _xMax);
+            float y = UnityEngine.Random.Range(-_yMax, _yMax);
+            PlaceFood(x, y, newObjectIndex);
+        }
+    }
+
+    void PlaceFood(float x, float y, int newObjectIndex)
+    {
+        GameObject foodObj = _foodObjPool[newObjectIndex];
         foodObj.SetActive(true);
 
         Food food = foodObj.GetComponent<Food>();
-        food.standardPos = new Vector3(UnityEngine.Random.Range(-startXPos, startXPos), UnityEngine.Random.Range(-startYPos, startYPos), 0);
-
-        ActiveFoodIndexes.Add(newObjectIndex);
+        food.standardPos = new Vector3(x, y, 0);
+        foodObj.transform.position = new Vector3(x, y, 0);
+        _activeFoodIndexes.Add(newObjectIndex);
     }
 
     public Sprite GetSprite(int index)
@@ -80,28 +116,44 @@ public class ObjectManager : MonoBehaviour {
         return _foodObjPool.IndexOf(obj);
     }
 
-    public void LoadNewLevelObjects(int currentLoadingLevel)
+    public void LoadNewLevelObjects(int loadingLevel)
     {
-        if (currentLoadingLevel < _prefabs.Length)
+        if (loadingLevel == 0)
         {
-            List<int> indexes = new List<int>();
-            foreach (var index in _inactiveFoodIndexes)
+            for (int i = 0; i <= _preLoadingLevelInterval; i++)
             {
-                indexes.Add(index);
-            }
-            _inactiveFoodIndexes.Clear();
+                for (int j = 0; j < _loadingNumOfOnePrefab; j++)
+                {
 
-            for (int i = _prefabMaxLoadCount * currentLoadingLevel + 1; i <= _prefabMaxLoadCount * (currentLoadingLevel + 1); i++)
-            {
-                indexes.Add(i);
-            }
+                    int newObjectIndex = i * _loadingNumOfOnePrefab + j;
 
-            indexes.Sort((x, y) => Random.value < 0.5f ? -1 : 1);
-
-            for (int i = 0; i < _prefabMaxLoadCount * (_statManager.maxScaleStep + 1); i++)
-            {
-                _inactiveFoodIndexes.Enqueue(indexes[i]);
+                    float x = Random.Range(-_xMax * 2, _xMax * 2);
+                    float y = Random.Range(-_yMax * 2, _yMax * 2);
+                    PlaceFood(x, y, newObjectIndex);
+                }
             }
         }
+        else
+        {
+            int preLoadingLevel = loadingLevel + _preLoadingLevelInterval;
+            if (preLoadingLevel < _prefabs.Length)
+            {
+                for (int i = 0; i <= _loadingNumOfOnePrefab; i++)
+                { 
+                    int newObjectIndex = preLoadingLevel * _loadingNumOfOnePrefab + i;
+                    
+                    Vector3 random;
+                    do
+                    {
+                        random = new Vector3(Random.Range(-_xMax * 2, _xMax * 2), Random.Range(-_yMax * 2, _yMax * 2), 0);
+                    } while (_visibleArea.bounds.Contains(random));
+                    
+                    PlaceFood(random.x, random.y, newObjectIndex);
+                }
+            }
+
+            
+        }
     }
+    
 }
