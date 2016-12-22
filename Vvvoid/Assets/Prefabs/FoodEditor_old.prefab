@@ -1,0 +1,141 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &100100000
+Prefab:
+  m_ObjectHideFlags: 1
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications: []
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 0}
+  m_RootGameObject: {fileID: 1000013600686142}
+  m_IsPrefabParent: 1
+--- !u!1 &1000013600686142
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 4000012762203976}
+  - 114: {fileID: 114000013840067952}
+  m_Layer: 0
+  m_Name: FoodEditor_old
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &4000012762203976
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013600686142}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.20931512, y: 0.02285152, z: 1.0494567}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+--- !u!114 &114000013840067952
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000013600686142}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3819176cb57ea2441a883338afb3d9d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  foodDatas:
+  - foodName: No.0 food
+    baseFuelPoint: 1
+    baseMassPoint: 0
+    baseTechPoint: 0.5
+    maxScale: 10
+    minScale: -10
+    sprite: {fileID: 21300000, guid: 649afec95054cb646aac7b9aa8618bdb, type: 3}
+  - foodName: No.1 food
+    baseFuelPoint: 2
+    baseMassPoint: 0
+    baseTechPoint: 1
+    maxScale: 11
+    minScale: -9
+    sprite: {fileID: 21300000, guid: bfecd15afc1c1d642847d04506dc0d2a, type: 3}
+  - foodName: No.2 food
+    baseFuelPoint: 4
+    baseMassPoint: 0
+    baseTechPoint: 2
+    maxScale: 12
+    minScale: -8
+    sprite: {fileID: 21300000, guid: c5d50e3d15e536a4aa81bf9bde3ef77a, type: 3}
+  - foodName: No.3 food
+    baseFuelPoint: 8
+    baseMassPoint: 0
+    baseTechPoint: 4
+    maxScale: 13
+    minScale: -7
+    sprite: {fileID: 21300000, guid: ad35139d2db739f4cae017f5cd89c85d, type: 3}
+  - foodName: No.4 food
+    baseFuelPoint: 16
+    baseMassPoint: 0
+    baseTechPoint: 8
+    maxScale: 14
+    minScale: -6
+    sprite: {fileID: 21300000, guid: d235534808073694885d442616be90a5, type: 3}
+  - foodName: No.5 food
+    baseFuelPoint: 32
+    baseMassPoint: 0
+    baseTechPoint: 16
+    maxScale: 15
+    minScale: -5
+    sprite: {fileID: 21300000, guid: 2ba8520d92ef684448641a0c3712bb56, type: 3}
+  - foodName: No.6 food
+    baseFuelPoint: 64
+    baseMassPoint: 0
+    baseTechPoint: 32
+    maxScale: 16
+    minScale: -4
+    sprite: {fileID: 21300000, guid: ee6d57d3d20f0ae428c082b943e7402f, type: 3}
+  - foodName: No.7 food
+    baseFuelPoint: 128
+    baseMassPoint: 0
+    baseTechPoint: 64
+    maxScale: 17
+    minScale: -3
+    sprite: {fileID: 21300000, guid: 9929493755bfa0d40956d7bec3aabfef, type: 3}
+  - foodName: No.8 food
+    baseFuelPoint: 256
+    baseMassPoint: 0
+    baseTechPoint: 128
+    maxScale: 18
+    minScale: -2
+    sprite: {fileID: 21300000, guid: 62bd79f1283d7c74cbaec82342b63dfc, type: 3}
+  - foodName: No.9 food
+    baseFuelPoint: 512
+    baseMassPoint: 0
+    baseTechPoint: 256
+    maxScale: 19
+    minScale: -1
+    sprite: {fileID: 21300000, guid: dc63c96350b1c0846a9cf3d468b89fb6, type: 3}
+  multiplyConstant:
+  - scale: 1
+    fuel: 1
+    tech: 1
+  - scale: 1.1
+    fuel: 2
+    tech: 2
+  - scale: 1.2
+    fuel: 4
+    tech: 4
+  - scale: 1.3
+    fuel: 7
+    tech: 7
+  - scale: 1.4
+    fuel: 10
+    tech: 10
+  objman: {fileID: 0}

@@ -64,7 +64,6 @@ public class ObjectManager : MonoBehaviour {
 
                 GameObject foodObj = new GameObject();
 
-                Instantiate<GameObject>(foodObj);
                 Food newFood = foodObj.AddComponent<Food>();
                 newFood = foodManager.FillFoodInfoByIndex(i, newFood);
 
@@ -74,7 +73,6 @@ public class ObjectManager : MonoBehaviour {
                 BoxCollider2D box = foodObj.AddComponent<BoxCollider2D>();
 
                 foodObj.SetActive(false);
-
                 foodObj.name = newFood.name;
                 foodObj.transform.tag = "Food";
 
@@ -103,7 +101,9 @@ public class ObjectManager : MonoBehaviour {
         Food food = foodObj.GetComponent<Food>();
         food.standardPos = new Vector3(x, y, 0);
         foodObj.transform.position = new Vector3(x, y, 0);
+
         _activeFoodIndexes.Add(newObjectIndex);
+        
     }
 
     public Sprite GetSprite(int index)
@@ -129,6 +129,7 @@ public class ObjectManager : MonoBehaviour {
 
                     float x = Random.Range(-_xMax * 2, _xMax * 2);
                     float y = Random.Range(-_yMax * 2, _yMax * 2);
+                    
                     PlaceFood(x, y, newObjectIndex);
                 }
             }
