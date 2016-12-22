@@ -51,217 +51,217 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3819176cb57ea2441a883338afb3d9d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  FoodDatas:
+  foodDatas:
   - foodName: No.0 food
     baseFuelPoint: 1
     baseMassPoint: 0
     baseTechPoint: 0.5
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 10
+    minScale: -10
+    sprite: {fileID: 21300000, guid: 649afec95054cb646aac7b9aa8618bdb, type: 3}
   - foodName: No.1 food
     baseFuelPoint: 2
     baseMassPoint: 0
     baseTechPoint: 1
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 11
+    minScale: -9
+    sprite: {fileID: 21300000, guid: bfecd15afc1c1d642847d04506dc0d2a, type: 3}
   - foodName: No.2 food
     baseFuelPoint: 4
     baseMassPoint: 0
     baseTechPoint: 2
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 12
+    minScale: -8
+    sprite: {fileID: 21300000, guid: c5d50e3d15e536a4aa81bf9bde3ef77a, type: 3}
   - foodName: No.3 food
     baseFuelPoint: 8
     baseMassPoint: 0
     baseTechPoint: 4
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 13
+    minScale: -7
+    sprite: {fileID: 21300000, guid: ad35139d2db739f4cae017f5cd89c85d, type: 3}
   - foodName: No.4 food
     baseFuelPoint: 16
     baseMassPoint: 0
     baseTechPoint: 8
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 14
+    minScale: -6
+    sprite: {fileID: 21300000, guid: d235534808073694885d442616be90a5, type: 3}
   - foodName: No.5 food
     baseFuelPoint: 32
     baseMassPoint: 0
     baseTechPoint: 16
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 15
+    minScale: -5
+    sprite: {fileID: 21300000, guid: 2ba8520d92ef684448641a0c3712bb56, type: 3}
   - foodName: No.6 food
     baseFuelPoint: 64
     baseMassPoint: 0
     baseTechPoint: 32
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 16
+    minScale: -4
+    sprite: {fileID: 21300000, guid: ee6d57d3d20f0ae428c082b943e7402f, type: 3}
   - foodName: No.7 food
     baseFuelPoint: 128
     baseMassPoint: 0
     baseTechPoint: 64
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 17
+    minScale: -3
+    sprite: {fileID: 21300000, guid: 9929493755bfa0d40956d7bec3aabfef, type: 3}
   - foodName: No.8 food
     baseFuelPoint: 256
     baseMassPoint: 0
     baseTechPoint: 128
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 18
+    minScale: -2
+    sprite: {fileID: 21300000, guid: 62bd79f1283d7c74cbaec82342b63dfc, type: 3}
   - foodName: No.9 food
     baseFuelPoint: 512
     baseMassPoint: 0
     baseTechPoint: 256
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 19
+    minScale: -1
+    sprite: {fileID: 21300000, guid: dc63c96350b1c0846a9cf3d468b89fb6, type: 3}
   - foodName: No.10 food
     baseFuelPoint: 1024
     baseMassPoint: 0
     baseTechPoint: 512
-    maxScale: 0
+    maxScale: 20
     minScale: 0
-    sprite: {fileID: 0}
+    sprite: {fileID: 21300000, guid: 649afec95054cb646aac7b9aa8618bdb, type: 3}
   - foodName: No.11 food
     baseFuelPoint: 2048
     baseMassPoint: 0
     baseTechPoint: 1024
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 21
+    minScale: 1
+    sprite: {fileID: 21300000, guid: bfecd15afc1c1d642847d04506dc0d2a, type: 3}
   - foodName: No.12 food
     baseFuelPoint: 4096
     baseMassPoint: 0
     baseTechPoint: 2048
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 22
+    minScale: 2
+    sprite: {fileID: 21300000, guid: c5d50e3d15e536a4aa81bf9bde3ef77a, type: 3}
   - foodName: No.13 food
     baseFuelPoint: 8192
     baseMassPoint: 0
     baseTechPoint: 4096
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 23
+    minScale: 3
+    sprite: {fileID: 21300000, guid: ad35139d2db739f4cae017f5cd89c85d, type: 3}
   - foodName: No.14 food
     baseFuelPoint: 16384
     baseMassPoint: 0
     baseTechPoint: 8192
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 24
+    minScale: 4
+    sprite: {fileID: 21300000, guid: d235534808073694885d442616be90a5, type: 3}
   - foodName: No.15 food
     baseFuelPoint: 32768
     baseMassPoint: 0
     baseTechPoint: 16384
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 25
+    minScale: 5
+    sprite: {fileID: 21300000, guid: 2ba8520d92ef684448641a0c3712bb56, type: 3}
   - foodName: No.16 food
     baseFuelPoint: 65536
     baseMassPoint: 0
     baseTechPoint: 32768
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 26
+    minScale: 6
+    sprite: {fileID: 21300000, guid: ee6d57d3d20f0ae428c082b943e7402f, type: 3}
   - foodName: No.17 food
     baseFuelPoint: 131072
     baseMassPoint: 0
     baseTechPoint: 65536
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 27
+    minScale: 7
+    sprite: {fileID: 21300000, guid: 9929493755bfa0d40956d7bec3aabfef, type: 3}
   - foodName: No.18 food
     baseFuelPoint: 262144
     baseMassPoint: 0
     baseTechPoint: 131072
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 28
+    minScale: 8
+    sprite: {fileID: 21300000, guid: 62bd79f1283d7c74cbaec82342b63dfc, type: 3}
   - foodName: No.19 food
     baseFuelPoint: 524288
     baseMassPoint: 0
     baseTechPoint: 262144
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 29
+    minScale: 9
+    sprite: {fileID: 21300000, guid: dc63c96350b1c0846a9cf3d468b89fb6, type: 3}
   - foodName: No.20 food
     baseFuelPoint: 1048576
     baseMassPoint: 0
     baseTechPoint: 524288
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 30
+    minScale: 10
+    sprite: {fileID: 21300000, guid: 649afec95054cb646aac7b9aa8618bdb, type: 3}
   - foodName: No.21 food
     baseFuelPoint: 2097152
     baseMassPoint: 0
     baseTechPoint: 1048576
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 31
+    minScale: 11
+    sprite: {fileID: 21300000, guid: bfecd15afc1c1d642847d04506dc0d2a, type: 3}
   - foodName: No.22 food
     baseFuelPoint: 4194304
     baseMassPoint: 0
     baseTechPoint: 2097152
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 32
+    minScale: 12
+    sprite: {fileID: 21300000, guid: c5d50e3d15e536a4aa81bf9bde3ef77a, type: 3}
   - foodName: No.23 food
     baseFuelPoint: 8388608
     baseMassPoint: 0
     baseTechPoint: 4194304
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 33
+    minScale: 13
+    sprite: {fileID: 21300000, guid: ad35139d2db739f4cae017f5cd89c85d, type: 3}
   - foodName: No.24 food
     baseFuelPoint: 16777216
     baseMassPoint: 0
     baseTechPoint: 8388608
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 34
+    minScale: 14
+    sprite: {fileID: 21300000, guid: d235534808073694885d442616be90a5, type: 3}
   - foodName: No.25 food
     baseFuelPoint: 33554432
     baseMassPoint: 0
     baseTechPoint: 16777216
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 35
+    minScale: 15
+    sprite: {fileID: 21300000, guid: 2ba8520d92ef684448641a0c3712bb56, type: 3}
   - foodName: No.26 food
     baseFuelPoint: 67108864
     baseMassPoint: 0
     baseTechPoint: 33554432
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 36
+    minScale: 16
+    sprite: {fileID: 21300000, guid: ee6d57d3d20f0ae428c082b943e7402f, type: 3}
   - foodName: No.27 food
     baseFuelPoint: 134217728
     baseMassPoint: 0
     baseTechPoint: 67108864
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 37
+    minScale: 17
+    sprite: {fileID: 21300000, guid: 9929493755bfa0d40956d7bec3aabfef, type: 3}
   - foodName: No.28 food
     baseFuelPoint: 268435456
     baseMassPoint: 0
     baseTechPoint: 134217728
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 38
+    minScale: 18
+    sprite: {fileID: 21300000, guid: 62bd79f1283d7c74cbaec82342b63dfc, type: 3}
   - foodName: No.29 food
     baseFuelPoint: 536870912
     baseMassPoint: 0
     baseTechPoint: 268435456
-    maxScale: 0
-    minScale: 0
-    sprite: {fileID: 0}
+    maxScale: 39
+    minScale: 19
+    sprite: {fileID: 21300000, guid: dc63c96350b1c0846a9cf3d468b89fb6, type: 3}
   multiplyConstant:
   - scale: 1
     fuel: 1
@@ -278,3 +278,4 @@ MonoBehaviour:
   - scale: 1.4
     fuel: 10
     tech: 10
+  objman: {fileID: 1000010006506790, guid: f98baa002bc50864996233dd122cedae, type: 2}

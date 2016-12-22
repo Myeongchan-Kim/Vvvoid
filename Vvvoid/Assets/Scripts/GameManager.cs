@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 public class GameManager : MonoBehaviour {
     [SerializeField] private StatManager _statManager;
@@ -8,14 +9,14 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private GameObject _playerObj;
 
     private float _elapsedTime = 0;
-    private int _currentLevel;
+    private int _currentMaxLevel;
     private int _prefabMaxLoadCount = 20;
     
     void Start ()
     {
         _objManager.MakeObjectPool();
-        _currentLevel = (int)_statManager.MaxScaleStep;
-        _objManager.LoadNewLevelObjects(_currentLevel);
+        _currentMaxLevel = (int)_statManager.MaxScaleStep;
+        _objManager.LoadNewLevelObjects(_currentMaxLevel);
 
         double currentScale = _statManager.CurrentScaleStep;
         ApplyCurrentScale(currentScale, currentScale);
@@ -24,10 +25,10 @@ public class GameManager : MonoBehaviour {
     void Update ()
     {
         //Load New Level Objects
-        if (_currentLevel < _statManager.MaxScaleStep)
+        if (_currentMaxLevel < _statManager.MaxScaleStep)
         {
-            _currentLevel = (int)_statManager.MaxScaleStep;
-            _objManager.LoadNewLevelObjects(_currentLevel);
+            _currentMaxLevel = (int)_statManager.MaxScaleStep;
+            _objManager.LoadNewLevelObjects(_currentMaxLevel);
         }
 
         //Generate new food
@@ -152,15 +153,14 @@ public class GameManager : MonoBehaviour {
 
     void UpdateObjectPostition()
     {
+        List<int> toInactiveList = new List<int>();
         foreach (var index in _objManager.ActiveFoodIndexes)
         {
             GameObject food = _objManager.FoodPool[index];
             if (food.transform.position.x < _removingPoint.position.x)
             {
                 // Debug.Log("Metor OUT!");
-                food.SetActive(false);
-                _objManager.InactiveFoodIndexQueue.Enqueue(index);
-                _objManager.ActiveFoodIndexes.Remove(index);
+                toInactiveList.Add(index);    
             }
 
             float scrollSpeed = _statManager.GetScrollSpeed();
@@ -168,6 +168,16 @@ public class GameManager : MonoBehaviour {
             Food f = food.GetComponent<Food>();
             f.standardPos -= new Vector3(scrollSpeed / (float)Math.Pow(2, f.standardScaleStep - _statManager.CurrentScaleStep), 0, 0) * Time.deltaTime;
         }
+
+        foreach(var i in toInactiveList)
+        {
+            GameObject food = _objManager.FoodPool[i];
+            food.SetActive(false);
+            _objManager.InactiveFoodIndexQueue.Enqueue(i);
+            _objManager.ActiveFoodIndexes.Remove(i);
+        }
+
+        toInactiveList.Clear();
     }
 
     void ApplyCurrentScale(double oldScale, double newScaleStep)

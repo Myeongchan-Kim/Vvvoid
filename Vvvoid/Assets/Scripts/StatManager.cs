@@ -38,8 +38,12 @@ public class StatManager : MonoBehaviour {
 
     double _techPoint = 0.0f;
     double _currentScaleStep = 1.0f;
-    double _maxScaleStep = 10.0f;
+
+    [SerializeField]
+    double _maxScaleStep = 3.0f;
+    [SerializeField]
     double _minScaleStep = 0.0f;
+
     double _velocity;
     private double _distance;
     double _fuelAmout;
