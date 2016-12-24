@@ -39,7 +39,7 @@ public class FoodManager : MonoBehaviour {
         FoodInfo foodInfo = foodDatas[level];
 
         newFood.name = foodInfo.foodName;
-        newFood.levelToReveal = foodInfo.minScale;
+        newFood.minScaleStep = foodInfo.minScale;
         newFood.maxScaleStep = foodInfo.maxScale;
         newFood.standardScaleStep = foodInfo.standardScale;
         newFood.isExhausted = false;

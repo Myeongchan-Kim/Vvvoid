@@ -82,30 +82,54 @@ public class ObjectManager : MonoBehaviour {
         }
     }
 
-    public void SpawnNewFood(double curScale)
+    public bool SpawnNewFood(double curScale)
     {
-        if (_inactiveFoodIndexQueue.Count > 0)
+        bool isFoodSpawned = false;
+
+        if (isFoodSpawned == false && _inactiveFoodIndexQueue.Count > 0)
         {
-            Debug.Log("Spawn New Food");
             int newObjectIndex = _inactiveFoodIndexQueue.Dequeue();
+            
             float x = UnityEngine.Random.Range(_xMax, 2 * _xMax);
             float y = UnityEngine.Random.Range(-_yMax, _yMax);
+            isFoodSpawned = PlaceFood(x, y, curScale, newObjectIndex);
 
-            PlaceFood(x, y, curScale, newObjectIndex);
+            if ( isFoodSpawned == false)
+            {
+                // If food doesn't fit cur level, 
+                _inactiveFoodIndexQueue.Enqueue(newObjectIndex);
+            }
+            else
+            {
+                isFoodSpawned = true;
+            }
+            
         }
+
+        return isFoodSpawned;
     }
 
-    void PlaceFood(float x, float y,double curScale, int newObjectIndex)
+    bool PlaceFood(float x, float y, double curScale, int newObjectIndex)
     {
         GameObject foodObj = _foodObjPool[newObjectIndex];
         
         Food food = foodObj.GetComponent<Food>();
         food.standardPos = new Vector3(x, y, 0);
-        Debug.Log("Place Food : " + x + "," + y + " curscale:" + curScale +" newId:" + newObjectIndex);
+
+        //Check food is fit current scale.
+        if (curScale > food.maxScaleStep || curScale < food.minScaleStep)
+            return false;
+
+        Debug.Log("Place Food : " + x + "," + y + 
+            " curscale:" + curScale +
+            " newId:" + newObjectIndex + 
+            " min:" + food.minScaleStep + " max:" + food.maxScaleStep);
         foodObj.transform.position = new Vector3(x, y, 0) * (float)Math.Pow(2, food.standardScaleStep - curScale); ;
         foodObj.SetActive(true);
 
         _activeFoodIndexes.Add(newObjectIndex);
+
+        return true;
     }
 
     public Sprite GetSprite(int index)
@@ -150,9 +174,7 @@ public class ObjectManager : MonoBehaviour {
             for (int i = 0; i < _loadingNumOfOnePrefab; i++)
             {
                 int newObjectIndex = preLoadingLevel * _loadingNumOfOnePrefab + i;
-
                 Vector3 random;
-
                 do
                 {
                     random = new Vector3(UnityEngine.Random.Range(-_xMax * 2, _xMax * 2), UnityEngine.Random.Range(-_yMax * 2, _yMax * 2), 0);

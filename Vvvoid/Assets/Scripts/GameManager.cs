@@ -34,7 +34,8 @@ public class GameManager : MonoBehaviour {
 
         //Generate new food
         _elapsedTime += Time.deltaTime;
-        if (_elapsedTime > 1 / _statManager.GetScrollSpeed())
+        double density = 1;
+        if (_elapsedTime > density / _statManager.GetScrollSpeed())
         {
             _elapsedTime = 0;
             _objManager.SpawnNewFood(_statManager.CurrentScaleStep);
@@ -121,10 +122,11 @@ public class GameManager : MonoBehaviour {
         {
             GameObject obj = _objManager.FoodPool[index];
             Food food = obj.GetComponent<Food>();
-            if (!food.isExhausted
-                && _statManager.CurrentScaleStep > food.levelToReveal
-                && _statManager.CurrentScaleStep < food.maxScaleStep)
-                obj.SetActive(true);
+
+            if (food.isExhausted
+                || _statManager.CurrentScaleStep < food.minScaleStep
+                || _statManager.CurrentScaleStep > food.maxScaleStep)
+                obj.SetActive(false);
         }
     }
 
