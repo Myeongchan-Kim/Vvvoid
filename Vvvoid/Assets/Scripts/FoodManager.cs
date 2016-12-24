@@ -34,18 +34,19 @@ public class FoodManager : MonoBehaviour {
 
     public GameObject objman;
 
-    public Food FillFoodInfoByIndex(int index, Food newFood)
+    public Food FillFoodInfoByLevel(int level, Food newFood)
     {
-        FoodInfo foodi = foodDatas[index];
+        FoodInfo foodInfo = foodDatas[level];
 
-        newFood.name = foodi.foodName;
-        newFood.levelToReveal = foodi.minScale;
-        newFood.standardScaleStep = foodi.standardScale;
+        newFood.name = foodInfo.foodName;
+        newFood.levelToReveal = foodInfo.minScale;
+        newFood.maxScaleStep = foodInfo.maxScale;
+        newFood.standardScaleStep = foodInfo.standardScale;
         newFood.isExhausted = false;
-        newFood.containingFuel = foodi.baseFuelPoint;
-        newFood.containingTech = foodi.baseTechPoint;
-        newFood.containingMass = foodi.baseMassPoint;
-        newFood.sprite = foodi.sprite;
+        newFood.containingFuel = foodInfo.baseFuelPoint;
+        newFood.containingTech = foodInfo.baseTechPoint;
+        newFood.containingMass = foodInfo.baseMassPoint;
+        newFood.sprite = foodInfo.sprite;
 
         return newFood;
     }
