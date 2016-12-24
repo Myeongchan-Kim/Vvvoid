@@ -8,6 +8,7 @@ public class Food : MonoBehaviour {
     public double containingMass;
     public Vector3 standardPos;
     public int levelToReveal;
+    public int maxScaleStep;
     public int standardScaleStep;
     public bool isExhausted;
 

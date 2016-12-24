@@ -16,7 +16,7 @@ public class GameManager : MonoBehaviour {
     {
         _objManager.MakeObjectPool();
         _currentMaxLevel = (int)_statManager.MaxScaleStep;
-        _objManager.LoadInitialLevel(_currentMaxLevel);
+        //_objManager.LoadInitialLevel(_currentMaxLevel);
 
         double currentScale = _statManager.CurrentScaleStep;
         ApplyCurrentScale(currentScale, currentScale);
@@ -37,12 +37,14 @@ public class GameManager : MonoBehaviour {
         if (_elapsedTime > 1 / _statManager.GetScrollSpeed())
         {
             _elapsedTime = 0;
-            _objManager.SpawnNewFood();
+            _objManager.SpawnNewFood(_statManager.CurrentScaleStep);
         }
 
         CheckExaustedFoods();
 
-        UpdateObjectsScale();
+        //Wheel input value from User.
+        float d = Input.GetAxis("Mouse ScrollWheel");
+        UpdateObjectsScale(d);
 
         UpdateObjectPostition();
 
@@ -119,49 +121,59 @@ public class GameManager : MonoBehaviour {
         {
             GameObject obj = _objManager.FoodPool[index];
             Food food = obj.GetComponent<Food>();
-            if (!food.isExhausted)
+            if (!food.isExhausted
+                && _statManager.CurrentScaleStep > food.levelToReveal
+                && _statManager.CurrentScaleStep < food.maxScaleStep)
                 obj.SetActive(true);
         }
     }
 
-    void UpdateObjectsScale()
+    void UpdateObjectsScale(float d)
     {
-        var d = Input.GetAxis("Mouse ScrollWheel");
         double currentScale = _statManager.CurrentScaleStep;
+        double newScaleStep = currentScale;
         if (d > 0f)
         {
-            double newScaleStep = _statManager.ZoomInOutByStep(1);
+            newScaleStep = _statManager.ZoomInOutByStep(1);
             ApplyCurrentScale(currentScale, newScaleStep);
+            // Update Active Object after scaling..
             UpdateActiveObjects();
+        }
 
-        }
-        else if (d < 0f)
+        if (d < 0f)
         {
-            double newScaleStep = _statManager.ZoomInOutByStep(-1);
+            newScaleStep = _statManager.ZoomInOutByStep(-1);
             ApplyCurrentScale(currentScale, newScaleStep);
+
+            // Update Active Object after scaling..
             UpdateActiveObjects();
         }
+
     }
 
     void UpdateObjectPostition()
     {
-        List<int> toInactiveList = new List<int>();
+        List<int> IndexListOutOfRange = new List<int>();
         foreach (var index in _objManager.ActiveFoodIndexes)
         {
-            GameObject food = _objManager.FoodPool[index];
-            if (food.transform.position.x < _removingPoint.position.x)
+            GameObject foodObj = _objManager.FoodPool[index];
+            Food food = foodObj.GetComponent<Food>();
+
+            if (food.standardPos.x < _removingPoint.position.x)
             {
                 // Debug.Log("Metor OUT!");
-                toInactiveList.Add(index);    
+                IndexListOutOfRange.Add(index);
+                continue; 
             }
 
             float scrollSpeed = _statManager.GetScrollSpeed();
-            food.transform.position -= new Vector3(scrollSpeed, 0, 0) * Time.deltaTime;
-            Food f = food.GetComponent<Food>();
-            f.standardPos -= new Vector3(scrollSpeed / (float)Math.Pow(2, f.standardScaleStep - _statManager.CurrentScaleStep), 0, 0) * Time.deltaTime;
+            foodObj.transform.position -= new Vector3(scrollSpeed, 0, 0) * Time.deltaTime;
+
+            float standardScrollSpeed = scrollSpeed * (float)Math.Pow(2d, _statManager.CurrentScaleStep - food.standardScaleStep);
+            food.standardPos -= new Vector3(standardScrollSpeed, 0, 0) * Time.deltaTime;
         }
 
-        foreach(var i in toInactiveList)
+        foreach (var i in IndexListOutOfRange)
         {
             GameObject food = _objManager.FoodPool[i];
             food.SetActive(false);
@@ -169,7 +181,7 @@ public class GameManager : MonoBehaviour {
             _objManager.ActiveFoodIndexes.Remove(i);
         }
 
-        toInactiveList.Clear();
+        IndexListOutOfRange.Clear();
     }
 
     void ApplyCurrentScale(double oldScale, double newScaleStep)
@@ -183,20 +195,19 @@ public class GameManager : MonoBehaviour {
         // Debug.Log("===== Oldscale:" + oldScale + " NewScale:" + newScaleStep + "standard:" + standardScaleStep);
         EffectManager.ScaleChange(_playerObj, newLocalScaleOfPlayer);
 
-        foreach (var food in _objManager.FoodPool)
+        foreach (var foodObj in _objManager.FoodPool)
         {
-            Food f = food.GetComponent<Food>();
+            Food f = foodObj.GetComponent<Food>();
 
             // Change scale of Food
             float newLocalScaleOfFood = (float)Math.Pow(2, f.standardScaleStep - newScaleStep);
-            EffectManager.ScaleChange(food, newLocalScaleOfFood);
+            EffectManager.ScaleChange(foodObj, newLocalScaleOfFood);
 
             // Change position of Food
-            float newPostionScaleOfFood = (float)Math.Pow(2, (f.standardScaleStep - newScaleStep));
-            Vector3 newPos = f.standardPos * newPostionScaleOfFood;
-            EffectManager.ChangeFoodPositon(food, _playerObj, newPos);
+            float newPostionScale = (float)Math.Pow(2, (f.standardScaleStep - newScaleStep));
+            Vector3 newPos = f.standardPos * newPostionScale;
+            EffectManager.ChangeFoodPositon(foodObj, _playerObj, newPos);
         }
     }
-
 
 }
