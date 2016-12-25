@@ -7,7 +7,7 @@ public class Food : MonoBehaviour {
     public double containingTech;
     public double containingMass;
     public Vector3 standardPos;
-    public int levelToReveal;
+    public int minScaleStep;
     public int maxScaleStep;
     public int standardScaleStep;
     public bool isExhausted;
