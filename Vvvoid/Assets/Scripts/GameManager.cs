@@ -19,7 +19,7 @@ public class GameManager : MonoBehaviour {
         //_objManager.LoadInitialLevel(_currentMaxLevel);
 
         double currentScale = _statManager.CurrentScaleStep;
-        ApplyCurrentScale(currentScale, currentScale);
+        ApplyCurrentScaleToAllFood(currentScale, currentScale);
         UpdateActiveObjects();
     }
 
@@ -137,7 +137,7 @@ public class GameManager : MonoBehaviour {
         if (d > 0f)
         {
             newScaleStep = _statManager.ZoomInOutByStep(1);
-            ApplyCurrentScale(currentScale, newScaleStep);
+            ApplyCurrentScaleToAllFood(currentScale, newScaleStep);
             // Update Active Object after scaling..
             UpdateActiveObjects();
         }
@@ -145,7 +145,7 @@ public class GameManager : MonoBehaviour {
         if (d < 0f)
         {
             newScaleStep = _statManager.ZoomInOutByStep(-1);
-            ApplyCurrentScale(currentScale, newScaleStep);
+            ApplyCurrentScaleToAllFood(currentScale, newScaleStep);
 
             // Update Active Object after scaling..
             UpdateActiveObjects();
@@ -186,7 +186,7 @@ public class GameManager : MonoBehaviour {
         IndexListOutOfRange.Clear();
     }
 
-    void ApplyCurrentScale(double oldScale, double newScaleStep)
+    void ApplyCurrentScaleToAllFood(double oldScale, double newScaleStep)
     {
         Player player = _playerObj.GetComponent<Player>();
 

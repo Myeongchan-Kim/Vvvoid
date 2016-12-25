@@ -122,7 +122,7 @@ public class FoodEditorWindow : EditorWindow
             foodi.sprite = objMan.GetSprite(i % 10);
             foodi.minScale = i - 2;
             foodi.maxScale = i + 8;
-            foodi.standardScale = i + 3;
+            foodi.standardScale = i + 1;
         }
     }
 }

@@ -20,7 +20,7 @@ public class ObjectManager : MonoBehaviour {
     private List<GameObject> _foodObjPool;
     private Queue<int> _inactiveFoodIndexQueue;
     private List<int> _activeFoodIndexes;
-    private int _loadingNumOfOnePrefab = 20;
+    private int _loadingNumOfOnePrefab = 40;
     private int _preLoadingLevelInterval;
     private float _xMax;
     private float _yMax;
@@ -75,10 +75,26 @@ public class ObjectManager : MonoBehaviour {
             }
         }
 
-        //All into inactive queue.
+        //shuffle List
+        List<int> shuffleList = new List<int>();
+        shuffleList.Capacity = _foodObjPool.Count;
         for (int id = 0; id < _foodObjPool.Count; id++)
         {
-            _inactiveFoodIndexQueue.Enqueue(id);
+            int ranid = UnityEngine.Random.Range(0, id);
+            shuffleList.Insert(ranid, id);
+        }
+
+        // // Check does shuffle work.
+        //Debug.Log(" ====== ShufleList");
+        //for(int i =0; i < 5; i++)
+        //{
+        //    Debug.Log("" + i + ":" + shuffleList[i]);
+        //}
+
+        //All into inactive queue.
+        for (int i = 0; i < _foodObjPool.Count; i++)
+        {
+            _inactiveFoodIndexQueue.Enqueue(shuffleList[i]);
         }
     }
 
@@ -86,11 +102,12 @@ public class ObjectManager : MonoBehaviour {
     {
         bool isFoodSpawned = false;
 
-        if (isFoodSpawned == false && _inactiveFoodIndexQueue.Count > 0)
+        while (isFoodSpawned == false && _inactiveFoodIndexQueue.Count > 0)
         {
             int newObjectIndex = _inactiveFoodIndexQueue.Dequeue();
-            
-            float x = UnityEngine.Random.Range(_xMax, 2 * _xMax);
+
+            //float x = UnityEngine.Random.Range(_xMax, 2 * _xMax);
+            float x = _xMax;
             float y = UnityEngine.Random.Range(-_yMax, _yMax);
             isFoodSpawned = PlaceFood(x, y, curScale, newObjectIndex);
 
@@ -102,10 +119,9 @@ public class ObjectManager : MonoBehaviour {
             else
             {
                 isFoodSpawned = true;
+                break;
             }
-            
         }
-
         return isFoodSpawned;
     }
 
@@ -114,8 +130,6 @@ public class ObjectManager : MonoBehaviour {
         GameObject foodObj = _foodObjPool[newObjectIndex];
         
         Food food = foodObj.GetComponent<Food>();
-        food.standardPos = new Vector3(x, y, 0);
-
         //Check food is fit current scale.
         if (curScale > food.maxScaleStep || curScale < food.minScaleStep)
             return false;
@@ -124,7 +138,13 @@ public class ObjectManager : MonoBehaviour {
             " curscale:" + curScale +
             " newId:" + newObjectIndex + 
             " min:" + food.minScaleStep + " max:" + food.maxScaleStep);
-        foodObj.transform.position = new Vector3(x, y, 0) * (float)Math.Pow(2, food.standardScaleStep - curScale); ;
+
+        food.standardPos = new Vector3(x, y, 0);
+        foodObj.transform.position = new Vector3(x, y, 0) * (float)Math.Pow(2, food.standardScaleStep - curScale);
+
+        float newLocalScaleOfFood = (float)Math.Pow(2, food.standardScaleStep - curScale);
+        foodObj.transform.localScale = new Vector3(1, 1, 1) * newLocalScaleOfFood;
+       
         foodObj.SetActive(true);
 
         _activeFoodIndexes.Add(newObjectIndex);
