@@ -197,8 +197,9 @@ public class GameManager : MonoBehaviour {
         // Debug.Log("===== Oldscale:" + oldScale + " NewScale:" + newScaleStep + "standard:" + standardScaleStep);
         EffectManager.ScaleChange(_playerObj, newLocalScaleOfPlayer);
 
-        foreach (var foodObj in _objManager.FoodPool)
+        foreach( int activeIndex in _objManager.ActiveFoodIndexes)
         {
+            GameObject foodObj = _objManager.FoodPool[activeIndex];
             Food f = foodObj.GetComponent<Food>();
 
             // Change scale of Food
@@ -210,6 +211,7 @@ public class GameManager : MonoBehaviour {
             Vector3 newPos = f.standardPos * newPostionScale;
             EffectManager.ChangeFoodPositon(foodObj, _playerObj, newPos);
         }
+        
     }
 
 }
