@@ -159,8 +159,8 @@ public class StatManager : MonoBehaviour {
         }
         else
         {
-            _fuelAmout = 0;
             energy = _fuelAmout;
+            _fuelAmout = 0;
         }
 
         _velocity = AddSpeed(_velocity, _mass, energy);

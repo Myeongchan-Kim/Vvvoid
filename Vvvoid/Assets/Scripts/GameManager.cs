@@ -134,21 +134,27 @@ public class GameManager : MonoBehaviour {
     {
         double currentScale = _statManager.CurrentScaleStep;
         double newScaleStep = currentScale;
+
+        
         if (d > 0f)
         {
             newScaleStep = _statManager.ZoomInOutByStep(1);
-            ApplyCurrentScaleToAllFood(currentScale, newScaleStep);
-            // Update Active Object after scaling..
-            UpdateActiveObjects();
-        }
-
-        if (d < 0f)
+            if (currentScale < newScaleStep)
+            {
+                ApplyCurrentScaleToAllFood(currentScale, newScaleStep);
+                // Update Active Object after scaling..
+                UpdateActiveObjects();
+            }
+        }else if (d < 0f)
         {
             newScaleStep = _statManager.ZoomInOutByStep(-1);
-            ApplyCurrentScaleToAllFood(currentScale, newScaleStep);
+            if (currentScale > newScaleStep)
+            {
+                ApplyCurrentScaleToAllFood(currentScale, newScaleStep);
 
-            // Update Active Object after scaling..
-            UpdateActiveObjects();
+                // Update Active Object after scaling..
+                UpdateActiveObjects();
+            }
         }
 
     }
@@ -200,18 +206,23 @@ public class GameManager : MonoBehaviour {
         foreach( int activeIndex in _objManager.ActiveFoodIndexes)
         {
             GameObject foodObj = _objManager.FoodPool[activeIndex];
-            Food f = foodObj.GetComponent<Food>();
-
-            // Change scale of Food
-            float newLocalScaleOfFood = (float)Math.Pow(2, f.standardScaleStep - newScaleStep);
-            EffectManager.ScaleChange(foodObj, newLocalScaleOfFood);
-
-            // Change position of Food
-            float newPostionScale = (float)Math.Pow(2, (f.standardScaleStep - newScaleStep));
-            Vector3 newPos = f.standardPos * newPostionScale;
-            EffectManager.ChangeFoodPositon(foodObj, _playerObj, newPos);
+            ApplyScaleForFood(foodObj, newScaleStep);
         }
         
+    }
+
+    void ApplyScaleForFood(GameObject foodObj, double newScaleStep)
+    {
+        Food f = foodObj.GetComponent<Food>();
+
+        // Change scale of Food
+        float newLocalScaleOfFood = (float)Math.Pow(2, f.standardScaleStep - newScaleStep);
+        EffectManager.ScaleChange(foodObj, newLocalScaleOfFood);
+
+        // Change position of Food
+        float newPostionScale = (float)Math.Pow(2, (f.standardScaleStep - newScaleStep));
+        Vector3 newPos = f.standardPos * newPostionScale;
+        EffectManager.ChangeFoodPositon(foodObj, _playerObj, newPos);
     }
 
 }
