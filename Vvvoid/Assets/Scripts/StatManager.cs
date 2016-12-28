@@ -37,12 +37,10 @@ public class StatManager : MonoBehaviour {
     }
 
     double _techPoint = 0.0f;
-    double _currentScaleStep = 1.0f;
+    int _currentScaleStep = 1;
 
-    [SerializeField]
-    double _maxScaleStep = 3.0f;
-    [SerializeField]
-    double _minScaleStep = 0.0f;
+    [SerializeField] int _maxScaleStep = 3;
+    [SerializeField] int _minScaleStep = 0;
 
     double _velocity;
     private double _distance;
@@ -132,7 +130,7 @@ public class StatManager : MonoBehaviour {
         _currentScaleStep = targetStep;
     }
 
-    public double ZoomInOutByStep(double step) //times == 10 means 10 times. times == 0.1 means 10% zoom out
+    public double ZoomInOutByStep(int step) //times == 10 means 10 times. times == 0.1 means 10% zoom out
     {
         _currentScaleStep += step;
         if (_currentScaleStep > _maxScaleStep)
@@ -144,11 +142,6 @@ public class StatManager : MonoBehaviour {
         Debug.Log("Current Step : " + _currentScaleStep);
 
         return _currentScaleStep;
-    }
-
-    public void ZoomInOutRealScale(double times)
-    {
-        _currentScaleStep += Math.Log(times, 2);
     }
 
     public double AccelCharacter(double energy)

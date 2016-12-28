@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour {
 
     private float _elapsedTime = 0;
     private int _currentMaxLevel;
-    private int _prefabMaxLoadCount = 20;
     
     void Start ()
     {
