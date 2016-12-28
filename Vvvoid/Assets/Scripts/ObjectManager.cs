@@ -64,7 +64,7 @@ public class ObjectManager : MonoBehaviour {
                 SpriteRenderer renderer = foodObj.AddComponent<SpriteRenderer>();
                 renderer.sprite = newFood.sprite;
 
-                BoxCollider2D box = foodObj.AddComponent<BoxCollider2D>();
+                foodObj.AddComponent<BoxCollider2D>();
 
                 foodObj.SetActive(false);
                 foodObj.name = newFood.name;
@@ -74,7 +74,7 @@ public class ObjectManager : MonoBehaviour {
 
             }
         }
-
+        
         //shuffle List
         List<int> shuffleList = new List<int>();
         shuffleList.Capacity = _foodObjPool.Count;
