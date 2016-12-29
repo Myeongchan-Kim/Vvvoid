@@ -41,8 +41,8 @@ public class UpgradeInfo
 
 public class ShopManager : MonoBehaviour {
 
-    public GameObject PlayerShopScrollview;
-    public GameObject PilotShopScrollview;
+    public GameObject playerShopScrollview;
+    public GameObject pilotShopScrollview;
     public GameObject shops;
 
     [SerializeField]
@@ -122,29 +122,46 @@ public class ShopManager : MonoBehaviour {
             Transform scrollview = t.GetChild(1);
             scrollview.gameObject.SetActive(false);
         }
-        
 
+        float yPos = 0;
         foreach(UpgradeInfo upgrade in playerShopUpgrades)
         {
-            GameObject menu = Instantiate(upgradeMenu);
-            var viewport = PlayerShopScrollview.transform.GetChild(0);
-            var content = viewport.transform.GetChild(0);
-            menu.transform.parent = content;
-            menu.SetActive(true);
-            
-            Button b = menu.transform.GetChild(0).GetComponent<Button>();
-            b.onClick.AddListener(delegate () { Debug.Log("=========="); });
+            MakeMenu(playerShopScrollview, upgrade, yPos);
+            yPos += -300;
         }
 
+        yPos = 0;
         foreach(UpgradeInfo upgrade in pilotShopUpgrades)
         {
-
+            MakeMenu(pilotShopScrollview, upgrade, yPos);
+            yPos += -300;
         }
+    }
+
+    void MakeMenu(GameObject scrollview, UpgradeInfo upgrade, float intervalY)
+    {
+        Debug.Log("======== + " + scrollview);
+        var viewport = scrollview.transform.GetChild(0);
+        var content = viewport.transform.GetChild(0);
+
+        GameObject menu = Instantiate(upgradeMenu);
+        menu.transform.SetParent(content, false);
+        Vector3 pos = menu.transform.localPosition;
+        pos.y += intervalY;
+        menu.transform.localPosition = pos;
+        
+        Button b = menu.transform.GetChild(0).GetComponent<Button>();
+        b.onClick.AddListener(() => { ApplyUpgrade(upgrade); });
+
+        Text t = b.transform.GetChild(0).gameObject.GetComponent<Text>();
+        t.text = upgrade.name;
+
+        Text desc = menu.transform.GetChild(1).gameObject.GetComponent<Text>();
+        desc.text = upgrade.description;
     }
     
     public void ToggleMenu(GameObject obj)
-    {
-        Debug.Log("======== Toggle SHop");
+    {   
         toggleActive(obj);
     }
 
