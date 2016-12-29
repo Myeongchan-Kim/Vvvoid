@@ -19,6 +19,18 @@ public class Sucker : MonoBehaviour {
         return _range.suckableRange * playerScale;
     }
 
+    public double AddUpgrade(string name, double mul)
+    {
+        _range.AddUpgrade(name, mul);
+
+        return _range.suckableRange;
+    }
+
+    public double AddAutoUpgrade(string name, double mul)
+    {
+        return 0;
+    }
+
     public void Suck(Food food)
     {
         EffectManager.SuckingEffectPlay(suckEffector, food);

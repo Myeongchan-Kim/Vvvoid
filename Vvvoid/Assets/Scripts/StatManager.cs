@@ -97,14 +97,20 @@ public class StatManager : MonoBehaviour {
 
         if (Input.GetButtonDown("Fire1"))
         {
-            double consumedEnergy = AccelCharacter(_fuelConsumtionForEachTouch);
-            if (consumedEnergy > 0.0)
-            {
-                AnimateAccel(consumedEnergy);
-            }else
-            {
-                AnimateNoFuel();
-            }
+            Accel();
+        }
+    }
+
+    public void Accel()
+    {
+        double consumedEnergy = AccelCharacter(_fuelConsumtionForEachTouch);
+        if (consumedEnergy > 0.0)
+        {
+            AnimateAccel(consumedEnergy);
+        }
+        else
+        {
+            AnimateNoFuel();
         }
     }
 
@@ -146,15 +152,7 @@ public class StatManager : MonoBehaviour {
 
     public double AccelCharacter(double energy)
     {
-        if (_fuelAmout - energy > 0)
-        {
-            _fuelAmout -= energy;
-        }
-        else
-        {
-            energy = _fuelAmout;
-            _fuelAmout = 0;
-        }
+        energy = ConsumeFuel(energy);
 
         _velocity = AddSpeed(_velocity, _mass, energy);
         //it return consumed energy
@@ -191,6 +189,71 @@ public class StatManager : MonoBehaviour {
     {
         _mass += getMassAmount;
         return _mass;
-    } 
+    }
 
+    public double CurrentMassPoint
+    {
+        get
+        {
+            return _mass;
+        }
+    }
+
+    public double CurrentFuelPoint
+    {
+        get
+        {
+            return _fuelAmout;
+        }
+    }
+
+    public double ConsumeFuel(double cost)
+    {
+        double consumed = cost;
+        if (_fuelAmout - cost > 0)
+        {
+            _fuelAmout -= cost;
+        }
+        else
+        {
+            consumed = _fuelAmout;
+            _fuelAmout = 0;
+        }
+
+        return consumed;
+    }
+
+    public double ConsumeTech(double cost)
+    {
+        double consumed = cost;
+        if (_techPoint - cost > 0)
+            _techPoint -= cost;
+        else
+        {
+            consumed = _techPoint;
+            _techPoint = 0;
+        }
+
+        return consumed;
+    }
+
+    public double ConsumeMass(double cost)
+    {
+        double consumed = cost;
+        if (_mass - cost > 0)
+            _mass -= cost;
+        else
+        {
+            consumed = _mass;
+            _mass = 0;
+        }
+
+        return consumed;
+    }
+
+    public int PlusMaxScaleStep(int add)
+    {
+        _maxScaleStep += add;
+        return _maxScaleStep;
+    }
 }
