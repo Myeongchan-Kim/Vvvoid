@@ -3,28 +3,31 @@ using System.Collections;
 using System;
 
 public class Sucker : MonoBehaviour {
-    [SerializeField]
-    private StatManager statManager;
 
-    [SerializeField]
-    private ParticleSystem suckEffector;
 
-    [SerializeField]
-    private SuckerRange _range;
+    [SerializeField] private StatManager _statManager;
+    [SerializeField] private ParticleSystem _suckEffector;
+    [SerializeField] private SuckerRange _manualSuckerRange;
+    [SerializeField] private SuckerRange _autoSuckerRange;
 
-    public double GetRange()
+    public double GetManualSuckerRange()
     {
         float playerScale = transform.parent.localScale.x;
-        Debug.Log("Current playerScale:" + playerScale);
-        return _range.suckableRange * playerScale;
+        return _manualSuckerRange.suckableRange * playerScale;
+    }
+
+    public double GetAutoSuckerRange()
+    {
+        float playerScale = transform.parent.localScale.x;
+        return _autoSuckerRange.suckableRange * playerScale;
     }
 
     public void Suck(Food food)
     {
-        EffectManager.SuckingEffectPlay(suckEffector, food);
-        
-        statManager.AddFuel(food.containingFuel);
-        statManager.AddMass(food.containingMass);
-        statManager.AddTech(food.containingTech);
+        EffectManager.SuckingEffectPlay(_suckEffector, food);
+
+        _statManager.AddFuel(food.containingFuel);
+        _statManager.AddMass(food.containingMass);
+        _statManager.AddTech(food.containingTech);
     }
 }

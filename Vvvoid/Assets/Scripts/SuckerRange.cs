@@ -16,15 +16,16 @@ public class SuckerUpgrade
 }
 
 public class SuckerRange : MonoBehaviour {
-    [SerializeField]
-    private GameObject DefulatRangeChecker;
+
+
+    [SerializeField] private GameObject _rangeChecker;
     public double suckableRange { get; private set; }
 
     public List<SuckerUpgrade> upgradedList;
     
     void Start()
     {
-        suckableRange = Math.Abs(DefulatRangeChecker.transform.position.x);
+        suckableRange = Math.Abs(_rangeChecker.transform.position.x);
     }
 
     void AddUpgrade(string name, double multiply)
@@ -34,7 +35,7 @@ public class SuckerRange : MonoBehaviour {
 
     void ApplyUpgrade()
     {
-        suckableRange = DefulatRangeChecker.transform.position.z;
+        suckableRange = _rangeChecker.transform.position.z;
         foreach (SuckerUpgrade upgrade in upgradedList)
         {
             suckableRange *= upgrade.multiply;
