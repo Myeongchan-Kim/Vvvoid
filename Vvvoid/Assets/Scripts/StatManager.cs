@@ -76,7 +76,7 @@ public class StatManager : MonoBehaviour {
         return sb.ToString();
     }
 
-    void Update () {
+    void Update() {
 
         _distance += (double)Time.deltaTime * _velocity;
 
@@ -94,33 +94,15 @@ public class StatManager : MonoBehaviour {
         sb.AppendFormat("Fuel : {0:N1} / {1:N1} ", _fuelAmout, _maxFuelAmout);
         _fuelUI.text = sb.ToString();
         sb.Length = 0;
-
-        if (Input.GetButtonDown("Fire1"))
-        {
-            Accel();
-        }
     }
 
-    public void Accel()
-    {
-        double consumedEnergy = AccelCharacter(_fuelConsumtionForEachTouch);
-        if (consumedEnergy > 0.0)
-        {
-            AnimateAccel(consumedEnergy);
-        }
-        else
-        {
-            AnimateNoFuel();
-        }
-    }
-
-    void AnimateNoFuel()
+    public void AnimateNoFuel()
     {
         player.NoFuelEffect();
         return;
     }
 
-    void AnimateAccel(double consumeAmount)
+    public void AnimateAccel(double consumeAmount)
     {
         player.FireRocketEffect();
         return;
@@ -150,10 +132,16 @@ public class StatManager : MonoBehaviour {
         return _currentScaleStep;
     }
 
-    public double AccelCharacter(double energy)
+    public double AccelCharacter()
+    {
+        double result = AccelCharacter(_fuelConsumtionForEachTouch);
+        return result;
+    }
+
+    private double AccelCharacter(double energy)
     {
         energy = ConsumeFuel(energy);
-
+        
         _velocity = AddSpeed(_velocity, _mass, energy);
         //it return consumed energy
         return energy;

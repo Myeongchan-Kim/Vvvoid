@@ -6,8 +6,8 @@ using System.Collections.Generic;
 public class ObjectManager : MonoBehaviour {
 
     public List<GameObject> FoodPool { get { return _foodObjPool; } }
-    public Queue<int> InactiveFoodIndexQueue { get { return _inactiveFoodIndexQueue; } }
-    public List<int> ActiveFoodIndexes { get { return _activeFoodIndexes; } }
+    public Queue<int> NotActiveFoodIndexQueue { get { return _notMovingFoodIndexQueue; } }
+    public List<int> MovingFoodIndexes { get { return _movingFoodIndexes; } }
 
 
     [SerializeField] private Transform _xMaxTransform;
@@ -17,8 +17,8 @@ public class ObjectManager : MonoBehaviour {
     [SerializeField] private FoodManager foodManager;
     
     private List<GameObject> _foodObjPool;
-    private Queue<int> _inactiveFoodIndexQueue;
-    private List<int> _activeFoodIndexes;
+    private Queue<int> _notMovingFoodIndexQueue;
+    private List<int> _movingFoodIndexes;
     private int _loadingNumOfOnePrefab = 40;
     private int _preLoadingLevelInterval;
     private float _xMax;
@@ -37,8 +37,8 @@ public class ObjectManager : MonoBehaviour {
     void OnEnable()
     {
         _foodObjPool = new List<GameObject>();
-        _inactiveFoodIndexQueue = new Queue<int>();
-        _activeFoodIndexes = new List<int>();
+        _notMovingFoodIndexQueue = new Queue<int>();
+        _movingFoodIndexes = new List<int>();
         _xMax = _xMaxTransform.position.x;
         _yMax = _yMaxTransform.position.y;
     }
@@ -82,18 +82,10 @@ public class ObjectManager : MonoBehaviour {
             int ranid = UnityEngine.Random.Range(0, id);
             shuffleList.Insert(ranid, id);
         }
-
-        // // Check does shuffle work.
-        //Debug.Log(" ====== ShufleList");
-        //for(int i =0; i < 5; i++)
-        //{
-        //    Debug.Log("" + i + ":" + shuffleList[i]);
-        //}
-
-        //All into inactive queue.
+        
         for (int i = 0; i < _foodObjPool.Count; i++)
         {
-            _inactiveFoodIndexQueue.Enqueue(shuffleList[i]);
+            _notMovingFoodIndexQueue.Enqueue(shuffleList[i]);
         }
     }
 
@@ -101,9 +93,9 @@ public class ObjectManager : MonoBehaviour {
     {
         bool isFoodSpawned = false;
 
-        while (isFoodSpawned == false && _inactiveFoodIndexQueue.Count > 0)
+        while (isFoodSpawned == false && _notMovingFoodIndexQueue.Count > 0)
         {
-            int newObjectIndex = _inactiveFoodIndexQueue.Dequeue();
+            int newObjectIndex = _notMovingFoodIndexQueue.Dequeue();
 
             //float x = UnityEngine.Random.Range(_xMax, 2 * _xMax);
             float x = _xMax;
@@ -113,7 +105,7 @@ public class ObjectManager : MonoBehaviour {
             if ( isFoodSpawned == false)
             {
                 // If food doesn't fit cur level, 
-                _inactiveFoodIndexQueue.Enqueue(newObjectIndex);
+                _notMovingFoodIndexQueue.Enqueue(newObjectIndex);
             }
             else
             {
@@ -145,63 +137,14 @@ public class ObjectManager : MonoBehaviour {
         foodObj.transform.localScale = new Vector3(1, 1, 1) * newLocalScaleOfFood;
        
         foodObj.SetActive(true);
-
-        _activeFoodIndexes.Add(newObjectIndex);
+        
+        _movingFoodIndexes.Add(newObjectIndex);
 
         return true;
     }
-// 
-//     public Sprite GetSprite(int index)
-//     {
-//         return _prefabs[index];
-//     }
 
     public int GetIndexOfObject(GameObject obj)
     {
         return _foodObjPool.IndexOf(obj);
     }
-
-    public void LoadInitialLevel(int initiaMaxlLevel)
-    {
-        Vector3 random;
-        float currentXMax = _xMax * Mathf.Pow(2, -initiaMaxlLevel);
-        float currentYMax = _yMax * Mathf.Pow(2, -initiaMaxlLevel);
-        for (int i = 0; i <= _preLoadingLevelInterval + initiaMaxlLevel; i++)
-        {
-            for (int j = 0; j < _loadingNumOfOnePrefab; j++)
-            {
-                int newObjectIndex = i * _loadingNumOfOnePrefab + j;
-                
-                do
-                {
-                    random = new Vector3(UnityEngine.Random.Range(-currentXMax, currentXMax), UnityEngine.Random.Range(-currentYMax, currentYMax), 0);
-                } while (_defaultBox.bounds.Contains(random));
-
-                PlaceFood(random.x, random.y, _statManager.CurrentScaleStep , newObjectIndex);
-            }
-            currentXMax *= 2;
-            currentYMax *= 2;
-            _defaultBox.transform.localScale *= 2;
-        }
-    }
-
-//     public void LoadNewLevelObjects(int loadingLevel)
-//     {
-//         int preLoadingLevel = loadingLevel + _preLoadingLevelInterval;
-//         if (preLoadingLevel < _prefabs.Length)
-//         {
-//             for (int i = 0; i < _loadingNumOfOnePrefab; i++)
-//             {
-//                 int newObjectIndex = preLoadingLevel * _loadingNumOfOnePrefab + i;
-//                 Vector3 random;
-//                 do
-//                 {
-//                     random = new Vector3(UnityEngine.Random.Range(-_xMax * 2, _xMax * 2), UnityEngine.Random.Range(-_yMax * 2, _yMax * 2), 0);
-//                 } while (_defaultBox.bounds.Contains(random));
-// 
-//                 PlaceFood(random.x, random.y, _statManager.CurrentScaleStep, newObjectIndex);
-//             }
-//             _defaultBox.transform.localScale *= 2;
-//         }
-//     }
 }

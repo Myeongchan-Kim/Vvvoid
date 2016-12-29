@@ -7,15 +7,17 @@ public class GameManager : MonoBehaviour {
     [SerializeField] private ObjectManager _objManager;
     [SerializeField] private Transform _removingPoint;
     [SerializeField] private GameObject _playerObj;
+    [SerializeField] private Sucker _sucker;
 
-    private float _elapsedTime = 0;
+    
+    private float _elapsedTime = 0.0f;
     private int _currentMaxLevel;
+    private int _autoSuckCheckIndex = 0;
     
     void Start ()
     {
         _objManager.MakeObjectPool();
         _currentMaxLevel = (int)_statManager.MaxScaleStep;
-        //_objManager.LoadInitialLevel(_currentMaxLevel);
 
         double currentScale = _statManager.CurrentScaleStep;
         ApplyCurrentScaleToAllFood(currentScale, currentScale);
@@ -24,13 +26,6 @@ public class GameManager : MonoBehaviour {
 
     void Update ()
     {
-//         //Load New Level Objects
-//         if (_currentMaxLevel < _statManager.MaxScaleStep)
-//         {
-//             _currentMaxLevel = (int)_statManager.MaxScaleStep;
-//             _objManager.LoadNewLevelObjects(_currentMaxLevel);
-//         }
-
         //Generate new food
         _elapsedTime += Time.deltaTime;
         double density = 1;
@@ -40,7 +35,7 @@ public class GameManager : MonoBehaviour {
             _objManager.SpawnNewFood(_statManager.CurrentScaleStep);
         }
 
-        CheckExaustedFoods();
+        CheckSuckableFoods();
 
         //Wheel input value from User.
         float d = Input.GetAxis("Mouse ScrollWheel");
@@ -49,49 +44,89 @@ public class GameManager : MonoBehaviour {
         UpdateObjectPostition();
 
     }
-     
 
-    void CheckExaustedFoods()
+    void CheckSuckableFoods()
     {
         if (Input.GetMouseButtonDown(0))
         {
-            RaycastHit2D hitInfo = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
-            if (hitInfo)
+            CheckManualSuckerRange();
+        }
+        
+        CheckAutoSuckerRange();
+    }
+
+    void CheckManualSuckerRange()
+    {
+        RaycastHit2D hitInfo = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
+        if (hitInfo)
+        {
+            if (hitInfo.transform.tag == "Food")
             {
-                HitProceedure(hitInfo);
+                HitFood(hitInfo);
+                return;
+            }
+        }
+
+        double consumedEnergy = _statManager.AccelCharacter();
+        if (consumedEnergy > 0.0)
+        {
+            _statManager.AnimateAccel(consumedEnergy);
+        }
+        else
+        {
+            _statManager.AnimateNoFuel();
+        }
+    }
+
+    void CheckAutoSuckerRange()
+    {
+        foreach (var index in _objManager.MovingFoodIndexes)
+        {
+            GameObject obj = _objManager.FoodPool[index];
+            if (obj.transform.position.x < _playerObj.transform.position.x + _sucker.GetAutoSuckerRange())
+            {
+                Food food = obj.GetComponent<Food>();
+                if (!food.isExhausted)
+                {
+                    if (food.minScaleStep < _statManager.MaxScaleStep)
+                    {
+
+                        float suckRange = (float)_sucker.GetAutoSuckerRange();
+                        float dist = Vector3.Distance(obj.transform.position, _playerObj.transform.position);
+                        if (dist < suckRange)
+                        {
+                            SuckFoodProcess(_sucker, food);
+                            _objManager.NotActiveFoodIndexQueue.Enqueue(_objManager.GetIndexOfObject(obj));
+                        }
+                    }
+                }
             }
         }
     }
 
+
+
+
     #region CheckExausteFoods related funcs
-    void HitProceedure(RaycastHit2D hitInfo)
-    {
-        if (hitInfo.transform.tag == "Food")
-        {
-            HitFood(hitInfo);
-        }
-        // .. else if ...
-    }
 
     void HitFood(RaycastHit2D hitInfo)
     {
         GameObject obj = hitInfo.transform.gameObject;
-        Sucker sucker = _playerObj.GetComponentInChildren<Sucker>();
-        Food food = obj.GetComponent<Food>();
 
 
-        float SuckRange = (float)sucker.GetRange();
-        float dist = Vector3.Distance(hitInfo.point, transform.position);
+        float suckRange = (float)_sucker.GetManualSuckerRange();
+        float dist = Vector3.Distance(hitInfo.point, _playerObj.transform.position);
         Debug.Log("Hit info: " + hitInfo.point);
         Debug.Log("Dist: " + dist);
 
-        if (obj.activeSelf && dist < SuckRange)
+        if (dist < suckRange)
         {
             // suck procedure
             // fuel+, tech+, mass+
-            SuckFoodProcess(sucker, food);
+            Food food = obj.GetComponent<Food>();
+            SuckFoodProcess(_sucker, food);
 
-            _objManager.InactiveFoodIndexQueue.Enqueue(_objManager.GetIndexOfObject(obj));
+            _objManager.NotActiveFoodIndexQueue.Enqueue(_objManager.GetIndexOfObject(obj));
         }
         else
         {
@@ -117,7 +152,7 @@ public class GameManager : MonoBehaviour {
 
     void UpdateActiveObjects()
     {
-        foreach (var index in _objManager.ActiveFoodIndexes)
+        foreach (var index in _objManager.MovingFoodIndexes)
         {
             GameObject obj = _objManager.FoodPool[index];
             Food food = obj.GetComponent<Food>();
@@ -160,8 +195,8 @@ public class GameManager : MonoBehaviour {
 
     void UpdateObjectPostition()
     {
-        List<int> IndexListOutOfRange = new List<int>();
-        foreach (var index in _objManager.ActiveFoodIndexes)
+        List<int> indexListOutOfRange = new List<int>();
+        foreach (var index in _objManager.MovingFoodIndexes)
         {
             GameObject foodObj = _objManager.FoodPool[index];
             Food food = foodObj.GetComponent<Food>();
@@ -169,7 +204,7 @@ public class GameManager : MonoBehaviour {
             if (food.standardPos.x < _removingPoint.position.x)
             {
                 // Debug.Log("Metor OUT!");
-                IndexListOutOfRange.Add(index);
+                indexListOutOfRange.Add(index);
                 continue; 
             }
 
@@ -180,15 +215,16 @@ public class GameManager : MonoBehaviour {
             food.standardPos -= new Vector3(standardScrollSpeed, 0, 0) * Time.deltaTime;
         }
 
-        foreach (var i in IndexListOutOfRange)
+        foreach (var i in indexListOutOfRange)
         {
             GameObject food = _objManager.FoodPool[i];
             food.SetActive(false);
-            _objManager.InactiveFoodIndexQueue.Enqueue(i);
-            _objManager.ActiveFoodIndexes.Remove(i);
+            _objManager.NotActiveFoodIndexQueue.Enqueue(i);
+            _objManager.MovingFoodIndexes.Remove(i);
+            _autoSuckCheckIndex--;
         }
 
-        IndexListOutOfRange.Clear();
+        indexListOutOfRange.Clear();
     }
 
     void ApplyCurrentScaleToAllFood(double oldScale, double newScaleStep)
@@ -202,7 +238,7 @@ public class GameManager : MonoBehaviour {
         // Debug.Log("===== Oldscale:" + oldScale + " NewScale:" + newScaleStep + "standard:" + standardScaleStep);
         EffectManager.ScaleChange(_playerObj, newLocalScaleOfPlayer);
 
-        foreach( int activeIndex in _objManager.ActiveFoodIndexes)
+        foreach( int activeIndex in _objManager.MovingFoodIndexes)
         {
             GameObject foodObj = _objManager.FoodPool[activeIndex];
             ApplyScaleForFood(foodObj, newScaleStep);

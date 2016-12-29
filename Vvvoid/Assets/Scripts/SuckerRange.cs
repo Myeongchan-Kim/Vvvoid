@@ -16,17 +16,19 @@ public class SuckerUpgrade
 }
 
 public class SuckerRange : MonoBehaviour {
-    [SerializeField]
-    private GameObject DefulatRangeChecker;
-    public float DefaultLocalScale;
-    public double suckableRange { get; private set; }
+
+
+    [SerializeField] private GameObject _rangeChecker;
+
+    public float defaultLocalScale;
+
+    public double SuckableRange { get; private set; }
 
     public List<SuckerUpgrade> upgradedList;
     
     void Start()
-    {
-        suckableRange = Math.Abs(DefulatRangeChecker.transform.position.x);
-        transform.localScale = new Vector3(DefaultLocalScale, DefaultLocalScale, DefaultLocalScale);
+    {   SuckableRange = Math.Abs(_rangeChecker.transform.position.x);
+        transform.localScale = new Vector3(defaultLocalScale, defaultLocalScale, defaultLocalScale);
     }
 
     public void AddUpgrade(string name, double multiply)
@@ -39,10 +41,10 @@ public class SuckerRange : MonoBehaviour {
 
     void ApplyUpgrade()
     {
-        suckableRange = DefulatRangeChecker.transform.position.z;
+        SuckableRange = _rangeChecker.transform.position.z;
         foreach (SuckerUpgrade upgrade in upgradedList)
         {
-            suckableRange *= upgrade.multiply;
+            SuckableRange *= upgrade.multiply;
         }
     }
     
