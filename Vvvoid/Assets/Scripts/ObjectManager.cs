@@ -14,7 +14,6 @@ public class ObjectManager : MonoBehaviour {
     [SerializeField] private Transform _yMaxTransform;
     [SerializeField] private BoxCollider _defaultBox;
     [SerializeField] private StatManager _statManager;
-    [SerializeField] private Sprite[] _prefabs;
     [SerializeField] private FoodManager foodManager;
     
     private List<GameObject> _foodObjPool;
@@ -151,11 +150,11 @@ public class ObjectManager : MonoBehaviour {
 
         return true;
     }
-
-    public Sprite GetSprite(int index)
-    {
-        return _prefabs[index];
-    }
+// 
+//     public Sprite GetSprite(int index)
+//     {
+//         return _prefabs[index];
+//     }
 
     public int GetIndexOfObject(GameObject obj)
     {
@@ -186,23 +185,23 @@ public class ObjectManager : MonoBehaviour {
         }
     }
 
-    public void LoadNewLevelObjects(int loadingLevel)
-    {
-        int preLoadingLevel = loadingLevel + _preLoadingLevelInterval;
-        if (preLoadingLevel < _prefabs.Length)
-        {
-            for (int i = 0; i < _loadingNumOfOnePrefab; i++)
-            {
-                int newObjectIndex = preLoadingLevel * _loadingNumOfOnePrefab + i;
-                Vector3 random;
-                do
-                {
-                    random = new Vector3(UnityEngine.Random.Range(-_xMax * 2, _xMax * 2), UnityEngine.Random.Range(-_yMax * 2, _yMax * 2), 0);
-                } while (_defaultBox.bounds.Contains(random));
-
-                PlaceFood(random.x, random.y, _statManager.CurrentScaleStep, newObjectIndex);
-            }
-            _defaultBox.transform.localScale *= 2;
-        }
-    }
+//     public void LoadNewLevelObjects(int loadingLevel)
+//     {
+//         int preLoadingLevel = loadingLevel + _preLoadingLevelInterval;
+//         if (preLoadingLevel < _prefabs.Length)
+//         {
+//             for (int i = 0; i < _loadingNumOfOnePrefab; i++)
+//             {
+//                 int newObjectIndex = preLoadingLevel * _loadingNumOfOnePrefab + i;
+//                 Vector3 random;
+//                 do
+//                 {
+//                     random = new Vector3(UnityEngine.Random.Range(-_xMax * 2, _xMax * 2), UnityEngine.Random.Range(-_yMax * 2, _yMax * 2), 0);
+//                 } while (_defaultBox.bounds.Contains(random));
+// 
+//                 PlaceFood(random.x, random.y, _statManager.CurrentScaleStep, newObjectIndex);
+//             }
+//             _defaultBox.transform.localScale *= 2;
+//         }
+//     }
 }

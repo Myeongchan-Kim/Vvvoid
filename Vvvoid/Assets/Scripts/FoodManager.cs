@@ -31,13 +31,11 @@ public class FoodManager : MonoBehaviour {
 
     public FoodInfo[] foodDatas;
     public StageMultiply[] multiplyConstant;
-
     public GameObject objman;
 
     public Food FillFoodInfoByLevel(int level, Food newFood)
     {
         FoodInfo foodInfo = foodDatas[level];
-
         newFood.name = foodInfo.foodName;
         newFood.minScaleStep = foodInfo.minScale;
         newFood.maxScaleStep = foodInfo.maxScale;
