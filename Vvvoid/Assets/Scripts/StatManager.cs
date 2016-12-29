@@ -76,7 +76,7 @@ public class StatManager : MonoBehaviour {
         return sb.ToString();
     }
 
-    void Update () {
+    void Update() {
 
         _distance += (double)Time.deltaTime * _velocity;
 
@@ -94,11 +94,6 @@ public class StatManager : MonoBehaviour {
         sb.AppendFormat("Fuel : {0:N1} / {1:N1} ", _fuelAmout, _maxFuelAmout);
         _fuelUI.text = sb.ToString();
         sb.Length = 0;
-
-        if (Input.GetButtonDown("Fire1"))
-        {
-            
-        }
     }
 
     public void AnimateNoFuel()
@@ -139,19 +134,17 @@ public class StatManager : MonoBehaviour {
 
     public double AccelCharacter()
     {
-        if (_fuelAmout - _fuelConsumtionForEachTouch > 0)
-        {
-            _fuelAmout -= _fuelConsumtionForEachTouch;
-        }
-        else
-        {
-            _fuelConsumtionForEachTouch = _fuelAmout;
-            _fuelAmout = 0;
-        }
+        double result = AccelCharacter(_fuelConsumtionForEachTouch);
+        return result;
+    }
 
-        _velocity = AddSpeed(_velocity, _mass, _fuelConsumtionForEachTouch);
+    private double AccelCharacter(double energy)
+    {
+        energy = ConsumeFuel(energy);
+        
+        _velocity = AddSpeed(_velocity, _mass, energy);
         //it return consumed energy
-        return _fuelConsumtionForEachTouch;
+        return energy;
     }
 
     double AddSpeed(double curVelocity , double targetMass, double energyToAdd)
@@ -184,6 +177,71 @@ public class StatManager : MonoBehaviour {
     {
         _mass += getMassAmount;
         return _mass;
-    } 
+    }
 
+    public double CurrentMassPoint
+    {
+        get
+        {
+            return _mass;
+        }
+    }
+
+    public double CurrentFuelPoint
+    {
+        get
+        {
+            return _fuelAmout;
+        }
+    }
+
+    public double ConsumeFuel(double cost)
+    {
+        double consumed = cost;
+        if (_fuelAmout - cost > 0)
+        {
+            _fuelAmout -= cost;
+        }
+        else
+        {
+            consumed = _fuelAmout;
+            _fuelAmout = 0;
+        }
+
+        return consumed;
+    }
+
+    public double ConsumeTech(double cost)
+    {
+        double consumed = cost;
+        if (_techPoint - cost > 0)
+            _techPoint -= cost;
+        else
+        {
+            consumed = _techPoint;
+            _techPoint = 0;
+        }
+
+        return consumed;
+    }
+
+    public double ConsumeMass(double cost)
+    {
+        double consumed = cost;
+        if (_mass - cost > 0)
+            _mass -= cost;
+        else
+        {
+            consumed = _mass;
+            _mass = 0;
+        }
+
+        return consumed;
+    }
+
+    public int PlusMaxScaleStep(int add)
+    {
+        _maxScaleStep += add;
+        return _maxScaleStep;
+    }
 }

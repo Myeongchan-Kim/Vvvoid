@@ -19,26 +19,32 @@ public class SuckerRange : MonoBehaviour {
 
 
     [SerializeField] private GameObject _rangeChecker;
-    public double suckableRange { get; private set; }
+
+    public float defaultLocalScale;
+
+    public double SuckableRange { get; private set; }
 
     public List<SuckerUpgrade> upgradedList;
     
     void Start()
-    {
-        suckableRange = Math.Abs(_rangeChecker.transform.position.x);
+    {   SuckableRange = Math.Abs(_rangeChecker.transform.position.x);
+        transform.localScale = new Vector3(defaultLocalScale, defaultLocalScale, defaultLocalScale);
     }
 
-    void AddUpgrade(string name, double multiply)
+    public void AddUpgrade(string name, double multiply)
     {
         upgradedList.Add(new SuckerUpgrade(name, multiply));
+        transform.localScale *= (float)multiply; //change appearnce size
+
+        ApplyUpgrade();
     }
 
     void ApplyUpgrade()
     {
-        suckableRange = _rangeChecker.transform.position.z;
+        SuckableRange = _rangeChecker.transform.position.z;
         foreach (SuckerUpgrade upgrade in upgradedList)
         {
-            suckableRange *= upgrade.multiply;
+            SuckableRange *= upgrade.multiply;
         }
     }
     

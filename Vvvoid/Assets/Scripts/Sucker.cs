@@ -13,13 +13,25 @@ public class Sucker : MonoBehaviour {
     public double GetManualSuckerRange()
     {
         float playerScale = transform.parent.localScale.x;
-        return _manualSuckerRange.suckableRange * playerScale;
+        return _manualSuckerRange.SuckableRange * playerScale;
     }
 
     public double GetAutoSuckerRange()
     {
         float playerScale = transform.parent.localScale.x;
-        return _autoSuckerRange.suckableRange * playerScale;
+        return _autoSuckerRange.SuckableRange * playerScale;
+    }
+
+    public double AddUpgrade(string name, double mul)
+    {
+        _manualSuckerRange.AddUpgrade(name, mul);
+
+        return _manualSuckerRange.SuckableRange;
+    }
+
+    public double AddAutoUpgrade(string name, double mul)
+    {
+        return 0;
     }
 
     public void Suck(Food food)
