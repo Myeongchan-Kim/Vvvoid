@@ -204,7 +204,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2108977287}
   m_HandleRect: {fileID: 2108977286}
   m_Direction: 2
-  m_Value: 1
+  m_Value: 0
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -364,6 +364,7 @@ MonoBehaviour:
   _objManager: {fileID: 630361176}
   _removingPoint: {fileID: 2124362358}
   _playerObj: {fileID: 1150123222}
+  _sucker: {fileID: 1469625035}
 --- !u!4 &138031039 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4000013691988912, guid: bcd120cf777e5c84d81e6664f3697f8a,
@@ -432,6 +433,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 8
+--- !u!1 &379326952 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1000011074609970, guid: bcd120cf777e5c84d81e6664f3697f8a,
+    type: 2}
+  m_PrefabInternal: {fileID: 2122112044}
 --- !u!4 &382128413 stripped
 Transform:
   m_PrefabParentObject: {fileID: 4000010651421370, guid: f98baa002bc50864996233dd122cedae,
@@ -662,6 +668,11 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 570203061}
+--- !u!198 &591269416 stripped
+ParticleSystem:
+  m_PrefabParentObject: {fileID: 198000010748255720, guid: bcd120cf777e5c84d81e6664f3697f8a,
+    type: 2}
+  m_PrefabInternal: {fileID: 2122112044}
 --- !u!1 &600852095
 GameObject:
   m_ObjectHideFlags: 0
@@ -3495,6 +3506,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
+--- !u!1 &1440433703 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1000011490595710, guid: bcd120cf777e5c84d81e6664f3697f8a,
+    type: 2}
+  m_PrefabInternal: {fileID: 2122112044}
 --- !u!114 &1469625035 stripped
 MonoBehaviour:
   m_PrefabParentObject: {fileID: 114000012362608130, guid: bcd120cf777e5c84d81e6664f3697f8a,
@@ -3666,6 +3682,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 0
+--- !u!114 &1599012666 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114000011090446782, guid: bcd120cf777e5c84d81e6664f3697f8a,
+    type: 2}
+  m_PrefabInternal: {fileID: 2122112044}
+  m_Script: {fileID: 11500000, guid: 534169c5dded62c499bd39d67e4cea91, type: 3}
 --- !u!1 &1692912747
 GameObject:
   m_ObjectHideFlags: 0
@@ -3791,6 +3813,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 6
+--- !u!114 &1798989518 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 114000012144456466, guid: bcd120cf777e5c84d81e6664f3697f8a,
+    type: 2}
+  m_PrefabInternal: {fileID: 2122112044}
+  m_Script: {fileID: 11500000, guid: 534169c5dded62c499bd39d67e4cea91, type: 3}
 --- !u!198 &1869635687
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -5603,7 +5631,7 @@ RectTransform:
   m_RootOrder: 0
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: -0.000061035156}
+  m_AnchoredPosition: {x: 0, y: 300.00006}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1898288165 stripped
@@ -6101,6 +6129,70 @@ Prefab:
     - target: {fileID: 114000011090446782, guid: bcd120cf777e5c84d81e6664f3697f8a,
         type: 2}
       propertyPath: DefaultLocalScale
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000011490595710, guid: bcd120cf777e5c84d81e6664f3697f8a, type: 2}
+      propertyPath: m_Name
+      value: ManualSuckerRangeChecker
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000011074609970, guid: bcd120cf777e5c84d81e6664f3697f8a, type: 2}
+      propertyPath: m_Name
+      value: AutoSuckerRangeChecker
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000010092025842, guid: bcd120cf777e5c84d81e6664f3697f8a, type: 2}
+      propertyPath: m_Name
+      value: ManualSuckerRange
+      objectReference: {fileID: 0}
+    - target: {fileID: 1000012616701578, guid: bcd120cf777e5c84d81e6664f3697f8a, type: 2}
+      propertyPath: m_Name
+      value: AutoSuckerRange
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000012144456466, guid: bcd120cf777e5c84d81e6664f3697f8a,
+        type: 2}
+      propertyPath: _rangeChecker
+      value: 
+      objectReference: {fileID: 379326952}
+    - target: {fileID: 114000011090446782, guid: bcd120cf777e5c84d81e6664f3697f8a,
+        type: 2}
+      propertyPath: _rangeChecker
+      value: 
+      objectReference: {fileID: 1440433703}
+    - target: {fileID: 4000012443799670, guid: bcd120cf777e5c84d81e6664f3697f8a, type: 2}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4000012601569522, guid: bcd120cf777e5c84d81e6664f3697f8a, type: 2}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000012362608130, guid: bcd120cf777e5c84d81e6664f3697f8a,
+        type: 2}
+      propertyPath: _statManager
+      value: 
+      objectReference: {fileID: 2119351036}
+    - target: {fileID: 114000012362608130, guid: bcd120cf777e5c84d81e6664f3697f8a,
+        type: 2}
+      propertyPath: _suckEffector
+      value: 
+      objectReference: {fileID: 591269416}
+    - target: {fileID: 114000012362608130, guid: bcd120cf777e5c84d81e6664f3697f8a,
+        type: 2}
+      propertyPath: _manualSuckerRange
+      value: 
+      objectReference: {fileID: 1599012666}
+    - target: {fileID: 114000012362608130, guid: bcd120cf777e5c84d81e6664f3697f8a,
+        type: 2}
+      propertyPath: _autoSuckerRange
+      value: 
+      objectReference: {fileID: 1798989518}
+    - target: {fileID: 114000012144456466, guid: bcd120cf777e5c84d81e6664f3697f8a,
+        type: 2}
+      propertyPath: defaultLocalScale
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114000011090446782, guid: bcd120cf777e5c84d81e6664f3697f8a,
+        type: 2}
+      propertyPath: defaultLocalScale
       value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
