@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour {
 
     private float _elapsedTime = 0;
     private int _currentMaxLevel;
-    private int _prefabMaxLoadCount = 20;
     
     void Start ()
     {
@@ -25,12 +24,12 @@ public class GameManager : MonoBehaviour {
 
     void Update ()
     {
-        //Load New Level Objects
-        if (_currentMaxLevel < _statManager.MaxScaleStep)
-        {
-            _currentMaxLevel = (int)_statManager.MaxScaleStep;
-            _objManager.LoadNewLevelObjects(_currentMaxLevel);
-        }
+//         //Load New Level Objects
+//         if (_currentMaxLevel < _statManager.MaxScaleStep)
+//         {
+//             _currentMaxLevel = (int)_statManager.MaxScaleStep;
+//             _objManager.LoadNewLevelObjects(_currentMaxLevel);
+//         }
 
         //Generate new food
         _elapsedTime += Time.deltaTime;
