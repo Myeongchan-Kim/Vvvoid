@@ -731,16 +731,16 @@ MonoBehaviour:
   _defaultBox: {fileID: 1406939288}
   _statManager: {fileID: 2119351036}
   _prefabs:
-  - {fileID: 21300000, guid: 649afec95054cb646aac7b9aa8618bdb, type: 3}
-  - {fileID: 21300000, guid: bfecd15afc1c1d642847d04506dc0d2a, type: 3}
-  - {fileID: 21300000, guid: c5d50e3d15e536a4aa81bf9bde3ef77a, type: 3}
-  - {fileID: 21300000, guid: ad35139d2db739f4cae017f5cd89c85d, type: 3}
-  - {fileID: 21300000, guid: d235534808073694885d442616be90a5, type: 3}
-  - {fileID: 21300000, guid: 2ba8520d92ef684448641a0c3712bb56, type: 3}
-  - {fileID: 21300000, guid: ee6d57d3d20f0ae428c082b943e7402f, type: 3}
-  - {fileID: 21300000, guid: 9929493755bfa0d40956d7bec3aabfef, type: 3}
-  - {fileID: 21300000, guid: 62bd79f1283d7c74cbaec82342b63dfc, type: 3}
-  - {fileID: 21300000, guid: dc63c96350b1c0846a9cf3d468b89fb6, type: 3}
+  - {fileID: 21300000, guid: 519ea8fdd1796e64187c603123147fb3, type: 3}
+  - {fileID: 21300008, guid: bcb3b7f218644184b9e6dbf69fd87f7f, type: 3}
+  - {fileID: 21300000, guid: bf2ccc60fc07a4a4d9866153ef4ed3b1, type: 3}
+  - {fileID: 21300000, guid: 790ece07bce0b20449f00776de9a97b3, type: 3}
+  - {fileID: 21300000, guid: 7fdf98f6235efa64c93029082fdbad24, type: 3}
+  - {fileID: 21300000, guid: 0c828f1b84c7694469c02a3403badb3c, type: 3}
+  - {fileID: 21300000, guid: ce55ccbd9afd71e4e82e7e5471f1e2cb, type: 3}
+  - {fileID: 21300000, guid: 002346bd30e6d344a9431258bc293736, type: 3}
+  - {fileID: 21300000, guid: 0991d405da11f9e4186122dcee636ed3, type: 3}
+  - {fileID: 21300000, guid: 594b8998dd0cf2f4b8ca42cc5a49c3ab, type: 3}
   foodManager: {fileID: 114000010876389040, guid: 533376d83bb03f04da8635331f8d131a,
     type: 2}
 --- !u!1 &651811466
@@ -1373,7 +1373,7 @@ Prefab:
     - target: {fileID: 224000012636717208, guid: 806b7c304cef3224fb362c056af8349c,
         type: 2}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000061035156
+      value: 0.000061035156
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 806b7c304cef3224fb362c056af8349c, type: 2}

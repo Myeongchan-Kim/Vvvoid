@@ -119,7 +119,7 @@ public class FoodEditorWindow : EditorWindow
             foodi.baseFuelPoint = Math.Pow(2, i);
             foodi.baseMassPoint = 0.0;
             foodi.baseTechPoint = foodi.baseFuelPoint * 0.5;
-            foodi.sprite = objMan.GetSprite(i % 10);
+            //foodi.sprite = objMan.GetSprite(i % 10);
             foodi.minScale = i - 2;
             foodi.maxScale = i + 8;
             foodi.standardScale = i + 1;
