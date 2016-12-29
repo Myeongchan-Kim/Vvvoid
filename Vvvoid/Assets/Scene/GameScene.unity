@@ -204,7 +204,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2108977287}
   m_HandleRect: {fileID: 2108977286}
   m_Direction: 2
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -279,8 +279,7 @@ MonoBehaviour:
   shops: {fileID: 412410115}
   _statmanager: {fileID: 2119351036}
   sucker: {fileID: 1469625035}
-  upgradeMenu: {fileID: 1000012831665920, guid: 107f9d38e5af8e14a935654e2b34cd26,
-    type: 2}
+  upgradeMenu: {fileID: 1898288165}
   playerShopUpgrades:
   - name: 
     description: 
@@ -5607,6 +5606,11 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: -0.000061035156}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
+--- !u!1 &1898288165 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1000012831665920, guid: 107f9d38e5af8e14a935654e2b34cd26,
+    type: 2}
+  m_PrefabInternal: {fileID: 1175671534}
 --- !u!224 &1898288166 stripped
 RectTransform:
   m_PrefabParentObject: {fileID: 224000011337025338, guid: 107f9d38e5af8e14a935654e2b34cd26,
