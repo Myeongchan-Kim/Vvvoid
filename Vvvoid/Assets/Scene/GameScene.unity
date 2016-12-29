@@ -5498,6 +5498,31 @@ Prefab:
       propertyPath: statManager
       value: 
       objectReference: {fileID: 2119351036}
+    - target: {fileID: 198000010748255720, guid: bcd120cf777e5c84d81e6664f3697f8a,
+        type: 2}
+      propertyPath: ShapeModule.radius
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 198000010748255720, guid: bcd120cf777e5c84d81e6664f3697f8a,
+        type: 2}
+      propertyPath: randomSeed
+      value: -1380393094
+      objectReference: {fileID: 0}
+    - target: {fileID: 198000010748255720, guid: bcd120cf777e5c84d81e6664f3697f8a,
+        type: 2}
+      propertyPath: EmissionModule.rate.scalar
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 198000010748255720, guid: bcd120cf777e5c84d81e6664f3697f8a,
+        type: 2}
+      propertyPath: InitialModule.startSpeed.scalar
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 198000010748255720, guid: bcd120cf777e5c84d81e6664f3697f8a,
+        type: 2}
+      propertyPath: InitialModule.startSize.scalar
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: bcd120cf777e5c84d81e6664f3697f8a, type: 2}
   m_IsPrefabParent: 0
