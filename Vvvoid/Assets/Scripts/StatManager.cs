@@ -97,24 +97,17 @@ public class StatManager : MonoBehaviour {
 
         if (Input.GetButtonDown("Fire1"))
         {
-            double consumedEnergy = AccelCharacter(_fuelConsumtionForEachTouch);
-            if (consumedEnergy > 0.0)
-            {
-                AnimateAccel(consumedEnergy);
-            }else
-            {
-                AnimateNoFuel();
-            }
+            
         }
     }
 
-    void AnimateNoFuel()
+    public void AnimateNoFuel()
     {
         player.NoFuelEffect();
         return;
     }
 
-    void AnimateAccel(double consumeAmount)
+    public void AnimateAccel(double consumeAmount)
     {
         player.FireRocketEffect();
         return;
@@ -144,21 +137,21 @@ public class StatManager : MonoBehaviour {
         return _currentScaleStep;
     }
 
-    public double AccelCharacter(double energy)
+    public double AccelCharacter()
     {
-        if (_fuelAmout - energy > 0)
+        if (_fuelAmout - _fuelConsumtionForEachTouch > 0)
         {
-            _fuelAmout -= energy;
+            _fuelAmout -= _fuelConsumtionForEachTouch;
         }
         else
         {
-            energy = _fuelAmout;
+            _fuelConsumtionForEachTouch = _fuelAmout;
             _fuelAmout = 0;
         }
 
-        _velocity = AddSpeed(_velocity, _mass, energy);
+        _velocity = AddSpeed(_velocity, _mass, _fuelConsumtionForEachTouch);
         //it return consumed energy
-        return energy;
+        return _fuelConsumtionForEachTouch;
     }
 
     double AddSpeed(double curVelocity , double targetMass, double energyToAdd)

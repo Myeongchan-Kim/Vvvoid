@@ -58,20 +58,26 @@ public class GameManager : MonoBehaviour {
             RaycastHit2D hitInfo = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
             if (hitInfo)
             {
-                HitProceedure(hitInfo);
+                if (hitInfo.transform.tag == "Food")
+                {
+                    HitFood(hitInfo);
+                    return;
+                }
+            }
+
+            double consumedEnergy = _statManager.AccelCharacter();
+            if (consumedEnergy > 0.0)
+            {
+                _statManager.AnimateAccel(consumedEnergy);
+            }
+            else
+            {
+                _statManager.AnimateNoFuel();
             }
         }
     }
 
     #region CheckExausteFoods related funcs
-    void HitProceedure(RaycastHit2D hitInfo)
-    {
-        if (hitInfo.transform.tag == "Food")
-        {
-            HitFood(hitInfo);
-        }
-        // .. else if ...
-    }
 
     void HitFood(RaycastHit2D hitInfo)
     {
